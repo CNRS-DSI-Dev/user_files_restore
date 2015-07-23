@@ -1,0 +1,59 @@
+#dropdown.drop-versions {
+	width: 360px;
+}
+
+#available_versions li {
+	width: 100%;
+	cursor: default;
+	height: 56px;
+	float: left;
+	border-bottom: 1px solid rgba(100,100,100,.1);
+}
+#available_versions li:last-child {
+	border-bottom: none;
+}
+
+#available_versions li > * {
+	padding: 7px;
+	float: left;
+	vertical-align: top;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+	opacity: .5;
+}
+
+#available_versions li span.versionName,
+#available_versions li > span {
+	padding: 17px 7px;
+}
+
+#available_versions li > span:hover,
+#available_versions li > span:focus {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	opacity: 1;
+}
+
+#available_versions img {
+	cursor: pointer;
+	padding-right: 4px;
+}
+
+#available_versions img.preview {
+	cursor: default;
+	opacity: 1;
+}
+
+#available_versions .versionDate {
+	min-width: 100px;
+	vertical-align: text-bottom;
+}
+
+#available_versions .restoreVersion {
+	cursor: pointer;
+	float: right;
+	max-width: 130px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+

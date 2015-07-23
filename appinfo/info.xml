@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<info>
+    <id>user_files_restore</id>
+    <name>User File Restore</name>
+    <description>Allows the user to restore files.</description>
+    <version>0.1</version>
+    <licence>AGPLv3</licence>
+    <author>Patrick Paysant / CNRS</author>
+    <require>7</require>
+</info>
