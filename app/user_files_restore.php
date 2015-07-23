@@ -12,8 +12,6 @@ namespace OCA\User_Files_Restore\App;
 
 use \OCP\AppFramework\App;
 use \OCA\User_Files_Restore\Controller\RequestController;
-use \OCA\User_Files_Restore\Service\RequestService;
-use \OCA\User_Files_Restore\Service\MailService;
 use \OCA\User_Files_Restore\Db\RequestMapper;
 
 class User_Files_Restore extends App {
@@ -22,7 +20,7 @@ class User_Files_Restore extends App {
      * Define your dependencies in here
      */
     public function __construct(array $urlParams=array()){
-        parent::__construct('User_Files_Restore', $urlParams);
+        parent::__construct('user_files_restore', $urlParams);
 
         $container = $this->getContainer();
 
@@ -35,36 +33,8 @@ class User_Files_Restore extends App {
                 $c->query('Request'),
                 $c->query('L10N'),
                 $c->query('RequestMapper'),
-                $c->query('RequestService'),
                 $c->query('UserId')
             );
-        });
-
-        /**
-         * Services
-         */
-        $container->registerService('RequestService', function($c){
-            return new RequestService(
-                $c->query('RequestMapper'),
-                $c->query('UserId')
-            );
-        });
-
-        $container->registerService('MailService', function($c){
-            return new MailService(
-                $c->query('AppName'),
-                $c->query('L10N'),
-                $c->query('Config'),
-                $c->query('UserManager'),
-                $c->query('GroupManager')
-            );
-        });
-
-        /**
-         * Storage Layer
-         */
-        $container->registerService('RootStorage', function($c) {
-            return $c->query('ServerContainer')->getRootFolder();
         });
 
         /**
@@ -80,10 +50,6 @@ class User_Files_Restore extends App {
         /**
          * Core
          */
-        $container->registerService('Config', function($c) {
-            return $c->query('ServerContainer')->getConfig();
-        });
-
         $container->registerService('UserId', function($c) {
             return \OCP\User::getUser();
         });
@@ -91,16 +57,5 @@ class User_Files_Restore extends App {
         $container->registerService('L10N', function($c) {
             return $c->query('ServerContainer')->getL10N($c->query('AppName'));
         });
-
-        $container->registerService('UserManager', function($c) {
-            return $c->query('ServerContainer')->getUserManager();
-        });
-
-        $container->registerService('GroupManager', function($c) {
-            return $c->query('ServerContainer')->getGroupManager();
-        });
-
     }
-
-
 }

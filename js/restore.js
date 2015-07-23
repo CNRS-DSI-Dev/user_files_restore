@@ -62,10 +62,10 @@ function restoreFile(file, revision) {
 console.log(file);
 console.log(revision);
 	$.ajax({
-		type: 'GET',
-		url: OC.linkTo('user_files_restore', 'ajax/restoreVersion.php'),
+		type: 'POST',
+		url: OC.generateUrl('apps/user_files_restore/api/1.0/request'),
 		dataType: 'json',
-		data: {file: file, revision: revision},
+		data: {file: file, version: revision},
 		async: false,
 		success: function(response) {
 			if (response.status === 'error') {
