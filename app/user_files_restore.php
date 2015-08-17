@@ -11,6 +11,7 @@
 namespace OCA\User_Files_Restore\App;
 
 use \OCP\AppFramework\App;
+use \OCA\User_Files_Restore\Controller\PageController;
 use \OCA\User_Files_Restore\Controller\RequestController;
 use \OCA\User_Files_Restore\Db\RequestMapper;
 
@@ -23,6 +24,19 @@ class User_Files_Restore extends App {
         parent::__construct('user_files_restore', $urlParams);
 
         $container = $this->getContainer();
+
+        /**
+         * Controllers
+         */
+        $container->registerService('PageController', function($c){
+            return new PageController(
+                $c->query('AppName'),
+                $c->query('Request'),
+                $c->query('L10N'),
+                $c->query('RequestMapper'),
+                $c->query('UserId')
+            );
+        });
 
         /**
          * Controllers

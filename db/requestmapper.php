@@ -29,6 +29,15 @@ class RequestMapper extends Mapper
         parent::__construct($db, 'user_files_restore');
     }
 
+    /**
+     * Store a restore request in database
+     * @param  int $uid     User identifier
+     * @param  string $path path to the file (or directory) to restore, relative to user's home dir (in owncloud)
+     * @param  int $version The resource's version taken (if possible) nb of days before today (should be 1, 15 or 30 days)
+     * @param  int $limit
+     * @param  int $offset
+     * @return OCA\User_Files_Restore\Db\request The created request
+     */
     public function saveRequest($uid, $path, $version, $limit=null, $offset=null)
     {
         $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ? AND path = ? AND status != " . self::STATUS_DONE;

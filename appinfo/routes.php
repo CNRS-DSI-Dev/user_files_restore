@@ -15,6 +15,12 @@ use \OCA\User_Files_Restore\App\User_Files_Restore;
 $application = new User_Files_Restore();
 $application->registerRoutes($this, array(
     'routes' => array(
+        // PAGE
+        array(
+            'name' => 'page#index',
+            'url' => '/',
+            'verb' => 'GET',
+        ),
         // REQUEST API
         array(
             'name' => 'request#create',
