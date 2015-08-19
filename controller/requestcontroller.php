@@ -37,13 +37,15 @@ class RequestController extends APIController
      * Create a request
      * @NoAdminRequired
      * @NoCSRFRequired
-     * @param string $recipientUid
+     * @param string $file File path
+     * @param int $version 1, 15 or 30
+     * @param string $filetype
      */
-    public function create($file, $version)
+    public function create($file, $version, $filetype)
     {
 
        try {
-            $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version);
+            $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
         }
         catch(\Exception $e) {
             $response = new JSONResponse();
@@ -61,6 +63,37 @@ class RequestController extends APIController
                 'msg' => 'Request saved',
                 'file' => $file,
                 'version' => (int)$version,
+            ),
+        );
+    }
+
+    /**
+     * Cancel a request
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @param int $id Request identifier
+     */
+    public function delete($id)
+    {
+
+       try {
+            $request = $this->requestMapper->cancelRequest($this->userId, $id);
+        }
+        catch(\Exception $e) {
+            $response = new JSONResponse();
+            return array(
+                'status' => 'error',
+                'data' => array(
+                    'msg' => $e->getMessage(),
+                ),
+            );
+        }
+
+        return array(
+            'status' => 'success',
+            'data' => array(
+                'msg' => 'Request cancelled',
+                'id' => $id,
             ),
         );
     }

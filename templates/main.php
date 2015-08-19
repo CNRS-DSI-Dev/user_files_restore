@@ -21,7 +21,12 @@
 <div id="todo" class="dataBlock">
     <p class="header"><?php p($l->t('To be processed')); ?></p>
     <?php foreach($_['todos'] as $todo): ?>
-    <p><span>(<?php p($todo['mime']); ?>)</span> <?php p($todo['file']); ?> </p>
+    <p id="<?php p($todo['id']); ?>">
+        <?php p($todo['file']); ?>
+        <span>(<?php p($todo['mime']); ?> ; </span>
+        <span><?php p($todo['version']); ?>)</span>
+        <span class="cancel" data-id="<?php p($todo['id']); ?>" data-version="<?php p($todo['version']); ?>"><?php p($l->t('Cancel')); ?></span>
+    </p>
     <?php endforeach; ?>
 </div>
 
@@ -35,7 +40,7 @@
 <div id="done" class="dataBlock">
     <p class="header"><?php p($l->t('Done')); ?></span></p>
     <?php foreach($_['dones'] as $done): ?>
-    <p><span>(<?php p($done['mime']); ?>)</span> <?php p($done['file']); ?></span> </p>
+    <p><span>(<?php p($done['mime']); ?>)</span> <?php p($done['file']); ?> <span class="date"><?php p($done['dateEnd']); ?></span> </p>
     <?php endforeach; ?>
 </div>
 

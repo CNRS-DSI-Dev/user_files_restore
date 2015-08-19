@@ -28,18 +28,33 @@
 #done p.header {
     background: url("../img/done2.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
 }
+.dataBlock p {
+    margin-left: 1em;
+    margin-right: 1em;
+}
 #todo.dataBlock p.header, #running.dataBlock p.header, #done.dataBlock p.header {
     font-weight: bold;
     background-color: #eee;
     padding: 1em 1em 1em 45px;
     margin-left:0;
+    margin-right:0;
     margin-bottom: 0.5em;
-}
-.dataBlock p {
-    margin-left: 1em;
 }
 .dataBlock p span {
     opacity: 0.5;
+}
+#done p span.date, #todo p span.cancel {
+	float: right;
+}
+#todo p span.cancel:hover {
+	opacity: 1;
+}
+#todo p span.cancel {
+	cursor: pointer;
+}
+#todo p.error {
+	background-color: red;
+	color: white;
 }
 #footer {
     clear: both;

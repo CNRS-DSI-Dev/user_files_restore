@@ -16,6 +16,7 @@ class Request extends Entity {
     protected $uid;
     protected $dateRequest;
     protected $path;
+    protected $filetype;
     protected $version;
     protected $status;
     protected $dateEnd;

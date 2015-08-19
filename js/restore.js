@@ -8,7 +8,6 @@
 
 /* global scanFiles, escapeHTML, formatDate */
 $(document).ready(function(){
-
 	if ($('#isPublic').val()){
 		// no versions actions in public mode
 		// beware of https://github.com/owncloud/core/issues/4545
@@ -53,19 +52,22 @@ $(document).ready(function(){
 	$(document).on("click", 'span[class="restoreVersion"]', function() {
 		var revision = $(this).attr('id');
 		var file = $(this).attr('value');
-		restoreFile(file, revision);
+		var type = $(this).attr('data-type');
+		restoreFile(file, revision, type);
 	});
 
+	$('#todo').on('click', 'span.cancel', function() {
+		var id = $(this).attr('data-id');
+		cancelRequest(id);
+	});
 });
 
-function restoreFile(file, revision) {
-console.log(file);
-console.log(revision);
+function restoreFile(file, revision, type) {
 	$.ajax({
 		type: 'POST',
 		url: OC.generateUrl('apps/user_files_restore/api/1.0/request'),
 		dataType: 'json',
-		data: {file: file, version: revision},
+		data: {file: file, version: revision, filetype: type},
 		async: false,
 		success: function(response) {
 			if (response.status === 'error') {
@@ -83,7 +85,6 @@ console.log(revision);
 }
 
 function createRestoreDropdown(filename, files, fileList) {
-
 	var start = 0;
 	var fileEl;
 
@@ -95,8 +96,11 @@ function createRestoreDropdown(filename, files, fileList) {
 	html += '</div>';
 	// html += '<input type="button" value="'+ t('files_versions', 'More versions...') + '" name="show-more-versions" id="show-more-versions" style="display: none;" />';
 
+	var filetype = '';
+
 	if (filename) {
 		fileEl = fileList.findFileEl(filename);
+		filetype = fileEl.attr('data-type');
 		fileEl.addClass('mouseOver');
 		$(html).appendTo(fileEl.find('td.filename'));
 	} else {
@@ -112,7 +116,11 @@ function createRestoreDropdown(filename, files, fileList) {
 		download+=version + " day(s) ago</span>";
 
 		var revert='<span class="restoreVersion"';
-		revert+=' id="' + version + '">';
+		revert+=' id="' + version + '"';
+		if (filetype != 0) {
+			revert+=' data-type="' + filetype + '"';
+		}
+		revert+='>';
 		revert+='<img';
 		revert+=' src="' + OC.imagePath('user_files_restore', 'restore3') + '"';
 		revert+=' name="restoreVersion"';
@@ -142,3 +150,25 @@ $(this).click(
 
 	}
 );
+
+function cancelRequest(idRequest) {
+	$.ajax({
+		type: 'POST',
+		url: OC.generateUrl('apps/user_files_restore/api/1.0/cancel'),
+		dataType: 'json',
+		data: {id: idRequest},
+		async: false,
+		success: function(response) {
+			if (response.status === 'error') {
+				OC.Notification.show( t('user_files_restore', 'Failed to cancel Restore request.') );
+				$('p#'+idRequest).addClass('error');
+				setTimeout(function() {
+					$('p#'+idRequest).removeClass('error');
+					OC.Notification.hide();
+				}, 10000);
+			} else {
+				$('p#'+idRequest).remove();
+			}
+		}
+	});
+}

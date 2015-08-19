@@ -32,6 +32,11 @@
                 <length>254</length>
             </field>
             <field>
+                <name>filetype</name>
+                <type>text</type>
+                <length>16</length>
+            </field>
+            <field>
                 <name>version</name>
                 <type>integer</type>
                 <default>0</default>
