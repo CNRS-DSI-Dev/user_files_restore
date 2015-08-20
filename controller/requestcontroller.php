@@ -38,7 +38,7 @@ class RequestController extends APIController
      * @NoAdminRequired
      * @NoCSRFRequired
      * @param string $file File path
-     * @param int $version 1, 15 or 30
+     * @param int $version Allowed values are stored in appconfig "versions"
      * @param string $filetype
      */
     public function create($file, $version, $filetype)

@@ -33,7 +33,7 @@ class RequestMapper extends Mapper
      * Store a restore request in database
      * @param  int    $uid      User identifier
      * @param  string $path     path to the file (or directory) to restore, relative to user's home dir (in owncloud)
-     * @param  int    $version  The resource's version taken (if possible) nb of days before today (should be 1, 15 or 30 days)
+     * @param  int    $version  The resource's version taken (if possible) nb of days before today (should be 1, 6 or 15 days)
      * @param  string $filetype File type ('file' or 'dir')
      * @param  int $limit
      * @param  int $offset

@@ -107,9 +107,16 @@ function createRestoreDropdown(filename, files, fileList) {
 		$(html).appendTo($('thead .share'));
 	}
 
-	addRestoreVersion(1);
-	addRestoreVersion(15);
-	addRestoreVersion(30);
+	var versions = [];
+	OC.AppConfig.getValue('user_files_restore', 'versions', '[1, 6, 15]', function(data) {
+		if (data != null) {
+			versions = JSON.parse(data);
+
+			$.each(versions, function(idx, version) {
+				addRestoreVersion(version);
+			});
+		}
+	});
 
 	function addRestoreVersion(version) {
 		var download='<span class="versionName">';
