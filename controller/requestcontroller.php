@@ -43,28 +43,68 @@ class RequestController extends APIController
      */
     public function create($file, $version, $filetype)
     {
+        $collision = false;
 
-       try {
-            $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
+        // test if there is(are) collision(s) between requests (one is contained into another)
+        $existingRequests = $this->requestMapper->getRequests($this->userId, RequestMapper::STATUS_TODO);
+
+        $toCancelRequests = array();
+        $toKeepRequest = '';
+        foreach($existingRequests as $existingRequest) {
+            if ($existingRequest->getPath() == $file) {
+                continue;
+            }
+
+            // a precedent request contains the new one ("version" does not count, here)
+            if (strpos($file, $existingRequest->getPath()) === 0) {
+                $collision = true;
+                $toKeepRequest = $existingRequest->getPath();
+                array_push($toCancelRequests, $file);
+
+                // there can't be any "higher level" path, so we stop
+                break;
+            }
+            // the current request contains a precedent request, so we plan the cancellation of this last one
+            elseif (strpos($existingRequest->getPath(), $file) === 0) {
+                $collision = true;
+                $toKeepRequest = $file;
+                array_push($toCancelRequests, $existingRequest->getPath());
+            }
         }
-        catch(\Exception $e) {
+
+        if ($collision) {
             $response = new JSONResponse();
             return array(
-                'status' => 'error',
+                'status' => 'collision_error',
                 'data' => array(
-                    'msg' => $e->getMessage(),
+                    'toKeep' => $toKeepRequest,
+                    'toCancel' => json_encode($toCancelRequests),
                 ),
             );
         }
+        else {
+            try {
+                // $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
+            }
+            catch(\Exception $e) {
+                $response = new JSONResponse();
+                return array(
+                    'status' => 'error',
+                    'data' => array(
+                        'msg' => $e->getMessage(),
+                    ),
+                );
+            }
 
-        return array(
-            'status' => 'success',
-            'data' => array(
-                'msg' => 'Request saved',
-                'file' => $file,
-                'version' => (int)$version,
-            ),
-        );
+            return array(
+                'status' => 'success',
+                'data' => array(
+                    'msg' => 'Request saved',
+                    'file' => $file,
+                    'version' => (int)$version,
+                ),
+            );
+        }
     }
 
     /**

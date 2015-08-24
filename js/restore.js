@@ -72,7 +72,11 @@ function restoreFile(file, revision, type) {
 		success: function(response) {
 			if (response.status === 'error') {
 				OC.Notification.show( t('user_files_restore', 'Failed to create Restore request for {file}.', {file:file}) );
-			} else {
+			}
+			else if (response.status === 'collision_error') {
+				OCdialogs.confirm('texte1</br>texte2</br>exte3', 'title', confirmCollisionOnRestore, true);
+			}
+			else {
 				$('#dropdown').hide('blind', function() {
 					$('#dropdown').closest('tr').find('.modified:first').html(relative_modified_date(revision));
 					$('#dropdown').remove();
@@ -82,6 +86,10 @@ function restoreFile(file, revision, type) {
 		}
 	});
 
+}
+
+function confirmCollisionOnRestore(ok) {
+	alert(ok);
 }
 
 function createRestoreDropdown(filename, files, fileList) {
@@ -108,7 +116,7 @@ function createRestoreDropdown(filename, files, fileList) {
 	}
 
 	var versions = [];
-	OC.AppConfig.getValue('user_files_restore', 'versions', '[1, 6, 15]', function(data) {
+	OC.AppConfig.getValue('user_files_restore', 'versions', {}, function(data) {
 		if (data != null) {
 			versions = JSON.parse(data);
 
