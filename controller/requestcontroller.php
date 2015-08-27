@@ -17,6 +17,8 @@ use \OCP\IL10N;
 use \OCA\User_Files_Restore\Db\RequestMapper;
 use \OCA\User_Files_Restore\Db\Request;
 
+use \OCA\User_Files_Restore\lib\Helper;
+
 class RequestController extends APIController
 {
 
@@ -108,6 +110,71 @@ class RequestController extends APIController
     }
 
     /**
+     * Confirm a request (after collision detection)
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     * @param string $file File path
+     * @param int $version Allowed values are stored in appconfig "versions"
+     * @param string $filetype
+     */
+    public function confirm($file, $version, $filetype)
+    {
+        $collision = false;
+
+        // test if there is(are) collision(s) between requests (one is contained into another)
+        $existingRequests = $this->requestMapper->getRequests($this->userId, RequestMapper::STATUS_TODO);
+
+        $toCancelRequests = array();
+        $toKeepRequest = '';
+        foreach($existingRequests as $existingRequest) {
+            if ($existingRequest->getPath() == $file) {
+                continue;
+            }
+
+            // a precedent request contains the new one ("version" does not count, here)
+            if (strpos($file, $existingRequest->getPath()) === 0) {
+                $collision = true;
+                $toKeepRequest = $existingRequest->getPath();
+                array_push($toCancelRequests, $file);
+
+                // there can't be any "higher level" path, so we stop
+                break;
+            }
+            // the current request contains a precedent request, so we plan the cancellation of this last one
+            elseif (strpos($existingRequest->getPath(), $file) === 0) {
+                $collision = true;
+                $toKeepRequest = $file;
+                array_push($toCancelRequests, $existingRequest->getPath());
+            }
+        }
+
+
+
+        try {
+            // $request = $this->requestMapper->saveRequest($this->userId, $toKeepRequest, (int)$version, $filetype);
+        }
+        catch(\Exception $e) {
+            $response = new JSONResponse();
+            return array(
+                'status' => 'error',
+                'data' => array(
+                    'msg' => $e->getMessage(),
+                ),
+            );
+        }
+
+        return array(
+            'status' => 'success',
+            'data' => array(
+                'msg' => 'Request saved',
+                'file' => $file,
+                'version' => (int)$version,
+            ),
+        );
+
+    }
+
+    /**
      * Cancel a request
      * @NoAdminRequired
      * @NoCSRFRequired
@@ -134,6 +201,35 @@ class RequestController extends APIController
             'data' => array(
                 'msg' => 'Request cancelled',
                 'id' => $id,
+            ),
+        );
+    }
+
+    /**
+     * Returns allowed "versions"
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function versions()
+    {
+       try {
+            $versions = Helper::getVersions();
+        }
+        catch(\Exception $e) {
+            $response = new JSONResponse();
+            return array(
+                'status' => 'error',
+                'data' => array(
+                    'msg' => $e->getMessage(),
+                ),
+            );
+        }
+
+        return array(
+            'status' => 'success',
+            'data' => array(
+                'msg' => 'Allowed versions',
+                'versions' => json_encode($versions),
             ),
         );
     }

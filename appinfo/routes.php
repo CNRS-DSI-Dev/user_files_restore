@@ -28,9 +28,19 @@ $application->registerRoutes($this, array(
             'verb' => 'POST',
         ),
         array(
+            'name' => 'request#confirm',
+            'url' => '/api/1.0/confirm',
+            'verb' => 'POST',
+        ),
+        array(
             'name' => 'request#delete',
             'url' => '/api/1.0/cancel',
             'verb' => 'POST',
+        ),
+        array(
+            'name' => 'request#versions',
+            'url' => '/api/1.0/versions',
+            'verb' => 'GET',
         ),
     ),
 ));

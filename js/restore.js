@@ -75,9 +75,12 @@ function restoreFile(file, revision, type) {
 			}
 			else if (response.status === 'collision_error') {
 				OCdialogs
-					.confirm('________________________________________', t('user_files_restore', 'Collision detected'), confirmCollisionOnRestore, true)
+					.confirm('________________________________________', t('user_files_restore', 'Collision detected'), function(ok) {
+						if (ok) {
+							confirmCollisionOnRestore(file, revision, type);
+						}
+					}, true)
 					.then(function() {
-						console.log(response);
 						var contentDiv = $('div.oc-dialog-content p');
 						var toKeep = response.data.toKeep;
 						var toCancel = JSON.parse(response.data.toCancel);
@@ -105,8 +108,19 @@ function restoreFile(file, revision, type) {
 
 }
 
-function confirmCollisionOnRestore(ok) {
-	alert(ok);
+function confirmCollisionOnRestore(file, revision, type) {
+	$.ajax({
+		type: 'POST',
+		url: OC.generateUrl('apps/user_files_restore/api/1.0/confirm'),
+		dataType: 'json',
+		data: {file: file, version: revision, filetype: type},
+		async: false,
+		success: function(response) {
+			if (response.status === 'error') {
+				OC.Notification.show( t('user_files_restore', 'Failed to create Restore request for {file}.', {file:file}) );
+			}
+		}
+	});
 }
 
 function createRestoreDropdown(filename, files, fileList) {
@@ -115,11 +129,9 @@ function createRestoreDropdown(filename, files, fileList) {
 
 	var html = '<div id="dropdown" class="drop drop-versions" data-file="'+escapeHTML(files)+'">';
 	html += '<div id="private">';
-	// html += '<ul id="found_versions">';
 	html += '<ul id="available_versions">';
 	html += '</ul>';
 	html += '</div>';
-	// html += '<input type="button" value="'+ t('files_versions', 'More versions...') + '" name="show-more-versions" id="show-more-versions" style="display: none;" />';
 
 	var filetype = '';
 
@@ -133,13 +145,24 @@ function createRestoreDropdown(filename, files, fileList) {
 	}
 
 	var versions = [];
-	OC.AppConfig.getValue('user_files_restore', 'versions', {}, function(data) {
-		if (data != null) {
-			versions = JSON.parse(data);
+	$.ajax({
+		type: 'GET',
+		url: OC.generateUrl('apps/user_files_restore/api/1.0/versions'),
+		dataType: 'json',
+		async: false,
+		success: function(response) {
+			if (response.status === 'error') {
+				OC.Notification.show( t('user_files_restore', 'Failed to get versions.') );
+				setTimeout(function() {
+					OC.Notification.hide();
+				}, 10000);
+			} else {
+				versions = JSON.parse(response.data.versions);
 
-			$.each(versions, function(idx, version) {
-				addRestoreVersion(version);
-			});
+				$.each(versions, function(idx, version) {
+					addRestoreVersion(version);
+				});
+			}
 		}
 	});
 
