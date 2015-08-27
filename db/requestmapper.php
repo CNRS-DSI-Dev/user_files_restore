@@ -72,15 +72,27 @@ class RequestMapper extends Mapper
         return $request;
     }
 
-    public function getRequests($uid, $status=0, $limit=null, $offset=null)
+    public function getRequests($uid=null, $status=0, $limit=null, $offset=null)
     {
-        if ($status == 0) {
-            $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ?";
-            $requests = $this->findEntities($sql, array($uid), $limit, $offset);
+        if ($uid === null) {
+            if ($status == 0) {
+                $sql = "SELECT * FROM *PREFIX*user_files_restore";
+                $requests = $this->findEntities($sql, array(), $limit, $offset);
+            }
+            else {
+                $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE status = ?";
+                $requests = $this->findEntities($sql, array($status), $limit, $offset);
+            }
         }
-        else {
-            $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ? AND status = ?";
-            $requests = $this->findEntities($sql, array($uid, $status), $limit, $offset);
+        else{
+            if ($status == 0) {
+                $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ?";
+                $requests = $this->findEntities($sql, array($uid), $limit, $offset);
+            }
+            else {
+                $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ? AND status = ?";
+                $requests = $this->findEntities($sql, array($uid, $status), $limit, $offset);
+            }
         }
 
         return $requests;

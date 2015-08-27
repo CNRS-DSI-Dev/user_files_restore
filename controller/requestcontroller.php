@@ -86,7 +86,7 @@ class RequestController extends APIController
         }
         else {
             try {
-                // $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
+                $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
             }
             catch(\Exception $e) {
                 $response = new JSONResponse();
