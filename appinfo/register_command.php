@@ -10,9 +10,11 @@
 
 use \OCA\User_Files_restore\App\User_Files_restore;
 use \OCA\User_Files_restore\Command\RequestList;
+use \OCA\User_Files_restore\Command\RequestClean;
 
 $app = new User_Files_restore;
 $c = $app->getContainer();
 $requestMapper = $c->query('RequestMapper');
 
 $application->add(new RequestList($requestMapper));
+$application->add(new RequestClean($requestMapper));

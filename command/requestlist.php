@@ -29,7 +29,6 @@ class RequestList extends Command
     protected $requestMapper;
     protected $output;
     protected $searchedStatus;
-    protected $csv;
 
     public function __construct(\OCA\User_Files_Restore\Db\RequestMapper $requestMapper)
     {
@@ -54,8 +53,11 @@ class RequestList extends Command
 
         // -- status option
         $this->searchedStatus = $input->getOption('status');
-        if ($this->searchedStatus != 1 AND $this->searchedStatus != 2 AND $this->searchedStatus != 3) {
-            $this->searchedStatus = null;
+
+        foreach ($this->searchedStatus as $key => $searchedStatus) {
+            if ($searchedStatus != 1 AND $searchedStatus != 2 AND $searchedStatus != 3) {
+                unset($this->searchedStatus[$key]);
+            }
         }
 
         // Listing
@@ -70,7 +72,7 @@ class RequestList extends Command
      */
     protected function listRequests($output)
     {
-        if (empty($this->searchedStatus) or $this->searchedStatus == 1) {
+        if (empty($this->searchedStatus) or in_array(1, $this->searchedStatus)) {
             $this->consoleDisplay('TODO migration requests');
             $todos = $this->listTodos();
             if (!empty($todos)) {
@@ -90,7 +92,7 @@ class RequestList extends Command
             }
         }
 
-        if (empty($this->searchedStatus) or $this->searchedStatus == 2) {
+        if (empty($this->searchedStatus) or in_array(2, $this->searchedStatus)) {
             $this->consoleDisplay('RUNNING migration requests');
             $runnings = $this->listRunnings();
             if (!empty($runnings)) {
@@ -110,7 +112,7 @@ class RequestList extends Command
             }
         }
 
-        if (empty($this->searchedStatus) or $this->searchedStatus == 3) {
+        if (empty($this->searchedStatus) or in_array(3, $this->searchedStatus)) {
             $this->consoleDisplay('DONE migration requests');
             $dones = $this->listDones();
             if (!empty($dones)) {

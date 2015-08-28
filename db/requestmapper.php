@@ -123,4 +123,24 @@ class RequestMapper extends Mapper
 
         return $request;
     }
+
+    /**
+     * Delete old "done" requests before a given date (nb of days from today)
+     * @param \DateTime $datetime
+     * @return  boolean
+     * @throws  \Exception in case of failure
+     */
+    public function deleteBefore($datetime)
+    {
+        $sql = "DELETE FROM *PREFIX*user_files_restore WHERE status = " . self::STATUS_DONE . " AND date_end <= ?  ";
+        try {
+            $this->execute($sql, array($datetime->format('Y-m-d H:i:s')));
+        }
+        catch (\Exception $e) {
+            throw new \Exception($this->l->t('fail to delete old requests.'));
+            return false;
+        }
+
+        return true;
+    }
 }
