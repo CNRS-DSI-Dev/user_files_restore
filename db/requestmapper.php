@@ -39,7 +39,7 @@ class RequestMapper extends Mapper
      * @param  int $offset
      * @return OCA\User_Files_Restore\Db\request The created request
      */
-    public function saveRequest($uid, $path, $version, $filetype, $limit=null, $offset=null)
+    public function saveRequest($uid, $path, $version, $filetype, $dateCreate=null, $limit=null, $offset=null)
     {
         if ($filetype !== 'file' and $filetype !== 'dir') {
             throw new \Exception($this->l->t('Server error: filetype not allowed.'));
@@ -61,7 +61,13 @@ class RequestMapper extends Mapper
 
         $request = new Request;
         $request->setUid($uid);
-        $request->setDateRequest(date('Y-m-d H:i:s'));
+
+        if (!empty($dateCreate)) {
+            $request->setDateRequest(date('Y-m-d H:i:s', $dateCreate));
+        }
+        else {
+            $request->setDateRequest(date('Y-m-d H:i:s'));
+        }
         $request->setPath($path);
         $request->setFiletype($filetype);
         $request->setVersion((int)$version);

@@ -71,29 +71,39 @@ function restoreFile(file, revision, type) {
 		async: false,
 		success: function(response) {
 			if (response.status === 'error') {
-				OC.Notification.show( t('user_files_restore', 'Failed to create Restore request for {file}.', {file:file}) );
+				if (response.data.msg != '') {
+					OC.Notification.show( t('user_files_restore', '{msg} ', {msg:response.data.msg}) );
+				}
+				else {
+					OC.Notification.show( t('user_files_restore', 'Failed to create Restore request for {file}.', {file:file}) );
+				}
 			}
 			else if (response.status === 'collision_error') {
 				OCdialogs
-					.confirm('________________________________________', t('user_files_restore', 'Collision detected'), function(ok) {
-						if (ok) {
-							confirmCollisionOnRestore(file, revision, type);
-						}
-					}, true)
+					.message(
+						'____________________________________',
+						t('user_files_restore', 'Restore request'),
+						'info',
+						OCdialogs.OK_BUTTON,
+						function(ok) {
+							if (ok) {
+								// TODO: VIRER LE CALLBACK;
+								console.log('hop');
+							}
+						},
+						true)
 					.then(function() {
 						var contentDiv = $('div.oc-dialog-content p');
-						var toKeep = response.data.toKeep;
+						var toKeep = JSON.parse(response.data.toKeep);
 						var toCancel = JSON.parse(response.data.toCancel);
 
-						var msg = "<b>" + t('user_files_restore', "Warning, your request collided with previous request(s).") + "</b></br></br>";
-						msg = msg + t('user_files_restore', "What will be keeped:") + "<br>";
-						msg = msg + toKeep + "<br/></br>";
+						if (toCancel.length > 0) {
+							var msg = "<b>" + t('user_files_restore', "Your request collided with previous request(s).") + "</b></br></br>";
+							msg = msg + t('user_files_restore', "These precedent requests will be automatically cancelled: ") + "</br>";
+							msg = msg + toCancel.join('</br>') + "</br>";
 
-						msg = msg + t('user_files_restore', "What will be automatically cancelled: ") + "</br>";
-						msg = msg + toCancel.join('</br>') + "</br></br>";
-
-						msg = msg + t('user_files_restore', "Are you sure to create this new request ?");
-						contentDiv.html(msg);
+							contentDiv.html(msg);
+						}
 					});
 			}
 			else {
@@ -106,21 +116,6 @@ function restoreFile(file, revision, type) {
 		}
 	});
 
-}
-
-function confirmCollisionOnRestore(file, revision, type) {
-	$.ajax({
-		type: 'POST',
-		url: OC.generateUrl('apps/user_files_restore/api/1.0/confirm'),
-		dataType: 'json',
-		data: {file: file, version: revision, filetype: type},
-		async: false,
-		success: function(response) {
-			if (response.status === 'error') {
-				OC.Notification.show( t('user_files_restore', 'Failed to create Restore request for {file}.', {file:file}) );
-			}
-		}
-	});
 }
 
 function createRestoreDropdown(filename, files, fileList) {

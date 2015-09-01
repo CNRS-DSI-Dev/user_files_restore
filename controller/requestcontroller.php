@@ -45,48 +45,172 @@ class RequestController extends APIController
      */
     public function create($file, $version, $filetype)
     {
+        $currentRequest = new Request();
+        $currentRequest->setUid($this->userId);
+        $currentRequest->setPath($file);
+        $currentRequest->setVersion($version);
+        $currentRequest->setFiletype($filetype);
+
         $collision = false;
 
         // test if there is(are) collision(s) between requests (one is contained into another)
         $existingRequests = $this->requestMapper->getRequests($this->userId, RequestMapper::STATUS_TODO);
-
+        $toSortRequests = array();
         $toCancelRequests = array();
-        $toKeepRequest = '';
+
         foreach($existingRequests as $existingRequest) {
-            if ($existingRequest->getPath() == $file) {
-                continue;
+            // if versions are identical
+            if ($existingRequest->getVersion() === $currentRequest->getVersion()) {
+                // if current request contains existing request
+                if (strpos($existingRequest->getPath(), $currentRequest->getPath()) === 0) {
+                    array_push($toCancelRequests,  $existingRequest);
+                    array_push($toSortRequests, $currentRequest);
+                    $collision = true;
+                }
+                // if current request same as existing request
+                elseif ($currentRequest->getPath() == $existingRequest->getPath()) {
+                    // nothing to do, exiting foreach
+                    $collision = true;
+                    break;
+                }
+                // if existing request contains current request
+                elseif (strpos($currentRequest->getPath(), $existingRequest->getPath()) === 0) {
+                    array_push($toSortRequests, $existingRequest);
+                }
             }
-
-            // a precedent request contains the new one ("version" does not count, here)
-            if (strpos($file, $existingRequest->getPath()) === 0) {
+            // versions are different
+            else {
                 $collision = true;
-                $toKeepRequest = $existingRequest->getPath();
-                array_push($toCancelRequests, $file);
-
-                // there can't be any "higher level" path, so we stop
-                break;
-            }
-            // the current request contains a precedent request, so we plan the cancellation of this last one
-            elseif (strpos($existingRequest->getPath(), $file) === 0) {
-                $collision = true;
-                $toKeepRequest = $file;
-                array_push($toCancelRequests, $existingRequest->getPath());
+                // if current request contains existing request
+                if (strpos($existingRequest->getPath(), $currentRequest->getPath()) === 0) {
+                    array_push($toSortRequests, $currentRequest);
+                    array_push($toSortRequests, $existingRequest);
+                }
+                // if current request same as existing request
+                elseif ($currentRequest->getPath() == $existingRequest->getPath()) {
+                    array_push($toCancelRequests, $existingRequest);
+                    array_push($toSortRequests, $currentRequest);
+                }
+                // if existing request contains current request
+                elseif (strpos($currentRequest->getPath(), $existingRequest->getPath()) === 0) {
+                    array_push($toSortRequests, $existingRequest);
+                    array_push($toSortRequests, $currentRequest);
+                }
             }
         }
 
+        // collision
+        // process toCancelRequest and toSortRequests
         if ($collision) {
-            $response = new JSONResponse();
+            if (!empty($toSortRequests)) {
+                $response = new JSONResponse();
+
+                // sort on path length, shortest first
+                usort($toSortRequests, function($a, $b) {
+                    if (strlen($a->getPath()) == strlen($b->getPath())) {
+                        return 0;
+                    }
+
+                    if (strlen($a->getPath()) < strlen($b->getPath())) {
+                        return -1;
+                    }
+
+                    return 1;
+                });
+
+                // update the dateRequest field (creation date) accordingly
+                // Obviously, current request will be created, not updated
+                $currentDate = time();
+                $inc = 1;
+                foreach($toSortRequests as $request) {
+                    $requestId = $request->getId();
+                    if (!empty($requestId)) {
+                        $request->setDateRequest(date('Y-m-d H:i:s', $currentDate + $inc));
+                        try {
+                            $this->requestMapper->update($request);
+                        }
+                        catch (\Exception $e) {
+                            $response = new JSONResponse();
+                            return array(
+                                'status' => 'error',
+                                'data' => array(
+                                    'msg' => $e->getMessage(),
+                                ),
+                            );
+                        }
+                    }
+                    else {
+                        try {
+                            $this->requestMapper->saveRequest(
+                                $this->userId,
+                                $request->getPath(),
+                                $request->getVersion(),
+                                $request->getFiletype(),
+                                $currentDate + $inc
+                            );
+                        }
+                        catch (\Exception $e) {
+                            $response = new JSONResponse();
+                            return array(
+                                'status' => 'error',
+                                'data' => array(
+                                    'msg' => $e->getMessage(),
+                                ),
+                            );
+                        }
+                    }
+
+                    $inc++;
+                }
+
+                // get only paths (to display to user)
+                $toSortRequestsPath = array_map(function($elt) {
+                    return $elt->getPath();
+                }, $toSortRequests);
+                $toCancelRequestsPath = array_map(function($elt) {
+                    return $elt->getPath();
+                }, $toCancelRequests);
+
+                // cancel useless requests
+                foreach($toCancelRequests as $request) {
+                    $this->requestMapper->delete($request);
+                }
+
+                // Probably do not want to display what we keep...
+                if (count($toCancelRequestsPath) > 0) {
+                    return array(
+                        'status' => 'collision_error',
+                        'data' => array(
+                            'toKeep' => json_encode($toSortRequestsPath),
+                            'toCancel' => json_encode($toCancelRequestsPath),
+                        ),
+                    );
+                }
+                else {
+                    return array(
+                        'status' => 'success',
+                        'data' => array(
+                            'msg' => 'Request saved.',
+                            'file' => $currentRequest->getPath(),
+                            'version' => (int)$currentRequest->getVersion(),
+                        ),
+                    );
+                }
+            }
+
             return array(
-                'status' => 'collision_error',
+                'status' => 'error',
                 'data' => array(
-                    'toKeep' => $toKeepRequest,
-                    'toCancel' => json_encode($toCancelRequests),
+                    'msg' => 'Your request is already taken in account by an older one.',
                 ),
             );
         }
-        else {
+        // no collision
+        // TODO: optimization: extract chars before first / on ER and CR, then compare
+        // insert current request
+        if (!$collision) {
             try {
-                $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
+                // $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
             }
             catch(\Exception $e) {
                 $response = new JSONResponse();
@@ -102,76 +226,11 @@ class RequestController extends APIController
                 'status' => 'success',
                 'data' => array(
                     'msg' => 'Request saved',
-                    'file' => $file,
-                    'version' => (int)$version,
+                    'file' => $currentRequest->getPath(),
+                    'version' => (int)$currentRequest->getVersion(),
                 ),
             );
         }
-    }
-
-    /**
-     * Confirm a request (after collision detection)
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     * @param string $file File path
-     * @param int $version Allowed values are stored in appconfig "versions"
-     * @param string $filetype
-     */
-    public function confirm($file, $version, $filetype)
-    {
-        $collision = false;
-
-        // test if there is(are) collision(s) between requests (one is contained into another)
-        $existingRequests = $this->requestMapper->getRequests($this->userId, RequestMapper::STATUS_TODO);
-
-        $toCancelRequests = array();
-        $toKeepRequest = '';
-        foreach($existingRequests as $existingRequest) {
-            if ($existingRequest->getPath() == $file) {
-                continue;
-            }
-
-            // a precedent request contains the new one ("version" does not count, here)
-            if (strpos($file, $existingRequest->getPath()) === 0) {
-                $collision = true;
-                $toKeepRequest = $existingRequest->getPath();
-                array_push($toCancelRequests, $file);
-
-                // there can't be any "higher level" path, so we stop
-                break;
-            }
-            // the current request contains a precedent request, so we plan the cancellation of this last one
-            elseif (strpos($existingRequest->getPath(), $file) === 0) {
-                $collision = true;
-                $toKeepRequest = $file;
-                array_push($toCancelRequests, $existingRequest->getPath());
-            }
-        }
-
-
-
-        try {
-            // $request = $this->requestMapper->saveRequest($this->userId, $toKeepRequest, (int)$version, $filetype);
-        }
-        catch(\Exception $e) {
-            $response = new JSONResponse();
-            return array(
-                'status' => 'error',
-                'data' => array(
-                    'msg' => $e->getMessage(),
-                ),
-            );
-        }
-
-        return array(
-            'status' => 'success',
-            'data' => array(
-                'msg' => 'Request saved',
-                'file' => $file,
-                'version' => (int)$version,
-            ),
-        );
-
     }
 
     /**
