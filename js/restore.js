@@ -72,11 +72,12 @@ function restoreFile(file, revision, type) {
 		success: function(response) {
 			if (response.status === 'error') {
 				if (response.data.msg != '') {
-					OC.Notification.show( t('user_files_restore', '{msg} ', {msg:response.data.msg}) );
+					OC.Notification.show(response.data.msg);
 				}
 				else {
 					OC.Notification.show( t('user_files_restore', 'Failed to create Restore request for {file}.', {file:file}) );
 				}
+				setTimeout(OC.Notification.hide, 7000);
 			}
 			else if (response.status === 'collision_error') {
 				OCdialogs
@@ -107,6 +108,8 @@ function restoreFile(file, revision, type) {
 					});
 			}
 			else {
+				OC.Notification.show( t('user_files_restore', 'Request successfully created') );
+				setTimeout(OC.Notification.hide, 7000);
 				$('#dropdown').hide('blind', function() {
 					$('#dropdown').closest('tr').find('.modified:first').html(relative_modified_date(revision));
 					$('#dropdown').remove();

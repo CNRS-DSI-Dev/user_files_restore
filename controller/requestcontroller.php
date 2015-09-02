@@ -23,7 +23,6 @@ class RequestController extends APIController
 {
 
     protected $requestMapper;
-    // protected $requestService;
     protected $userId;
 
     public function __construct($appName, IRequest $request, IL10N $l, RequestMapper $requestMapper, $userId)
@@ -31,14 +30,12 @@ class RequestController extends APIController
         parent::__construct($appName, $request, 'GET, POST');
         $this->l = $l;
         $this->requestMapper = $requestMapper;
-        // $this->requestService = $requestService;
         $this->userId = $userId;
     }
 
     /**
      * Create a request
      * @NoAdminRequired
-     * @NoCSRFRequired
      * @param string $file File path
      * @param int $version Allowed values are stored in appconfig "versions"
      * @param string $filetype
@@ -80,21 +77,23 @@ class RequestController extends APIController
             }
             // versions are different
             else {
-                $collision = true;
                 // if current request contains existing request
                 if (strpos($existingRequest->getPath(), $currentRequest->getPath()) === 0) {
                     array_push($toSortRequests, $currentRequest);
                     array_push($toSortRequests, $existingRequest);
+                    $collision = true;
                 }
                 // if current request same as existing request
                 elseif ($currentRequest->getPath() == $existingRequest->getPath()) {
                     array_push($toCancelRequests, $existingRequest);
                     array_push($toSortRequests, $currentRequest);
+                    $collision = true;
                 }
                 // if existing request contains current request
                 elseif (strpos($currentRequest->getPath(), $existingRequest->getPath()) === 0) {
                     array_push($toSortRequests, $existingRequest);
                     array_push($toSortRequests, $currentRequest);
+                    $collision = true;
                 }
             }
         }
@@ -190,7 +189,7 @@ class RequestController extends APIController
                     return array(
                         'status' => 'success',
                         'data' => array(
-                            'msg' => 'Request saved.',
+                            'msg' => $this->l->t('Request successfully created'),
                             'file' => $currentRequest->getPath(),
                             'version' => (int)$currentRequest->getVersion(),
                         ),
@@ -201,16 +200,17 @@ class RequestController extends APIController
             return array(
                 'status' => 'error',
                 'data' => array(
-                    'msg' => 'Your request is already taken in account by an older one.',
+                    'msg' => $this->l->t('Your request is already taken in account by an older one.'),
                 ),
             );
         }
+
         // no collision
         // TODO: optimization: extract chars before first / on ER and CR, then compare
         // insert current request
         if (!$collision) {
             try {
-                // $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
+                $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
             }
             catch(\Exception $e) {
                 $response = new JSONResponse();
@@ -225,7 +225,7 @@ class RequestController extends APIController
             return array(
                 'status' => 'success',
                 'data' => array(
-                    'msg' => 'Request saved',
+                    'msg' => $this->l->t('Request successfully created'),
                     'file' => $currentRequest->getPath(),
                     'version' => (int)$currentRequest->getVersion(),
                 ),
@@ -236,7 +236,6 @@ class RequestController extends APIController
     /**
      * Cancel a request
      * @NoAdminRequired
-     * @NoCSRFRequired
      * @param int $id Request identifier
      */
     public function delete($id)
@@ -258,7 +257,7 @@ class RequestController extends APIController
         return array(
             'status' => 'success',
             'data' => array(
-                'msg' => 'Request cancelled',
+                'msg' => $this->l->t('Request cancelled'),
                 'id' => $id,
             ),
         );
@@ -287,7 +286,7 @@ class RequestController extends APIController
         return array(
             'status' => 'success',
             'data' => array(
-                'msg' => 'Allowed versions',
+                'msg' => $this->l->t('Allowed versions'),
                 'versions' => json_encode($versions),
             ),
         );

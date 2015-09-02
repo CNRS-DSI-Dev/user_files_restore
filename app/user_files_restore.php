@@ -39,9 +39,6 @@ class User_Files_Restore extends App {
             );
         });
 
-        /**
-         * Controllers
-         */
         $container->registerService('RequestController', function($c){
             return new RequestController(
                 $c->query('AppName'),
@@ -58,7 +55,8 @@ class User_Files_Restore extends App {
         $container->registerService('RequestService', function($c){
             return new RequestService(
                 $c->query('RequestMapper'),
-                $c->query('UserId')
+                $c->query('UserId'),
+                $c->query('L10N')
             );
         });
 
