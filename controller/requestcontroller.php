@@ -190,6 +190,7 @@ class RequestController extends APIController
                         'status' => 'success',
                         'data' => array(
                             'msg' => $this->l->t('Request successfully created'),
+                            'id' => $currentRequest->getId(),
                             'file' => $currentRequest->getPath(),
                             'version' => (int)$currentRequest->getVersion(),
                         ),
@@ -226,8 +227,9 @@ class RequestController extends APIController
                 'status' => 'success',
                 'data' => array(
                     'msg' => $this->l->t('Request successfully created'),
-                    'file' => $currentRequest->getPath(),
-                    'version' => (int)$currentRequest->getVersion(),
+                    'id' => $request->getId(),
+                    'file' => $request->getPath(),
+                    'version' => (int)$request->getVersion(),
                 ),
             );
         }

@@ -41,7 +41,7 @@ class RequestMapper extends Mapper
      */
     public function saveRequest($uid, $path, $version, $filetype, $dateCreate=null, $limit=null, $offset=null)
     {
-        if ($filetype !== 'file' and $filetype !== 'dir') {
+        if ($filetype !== 'file' and $filetype !== 'dir' and $filetype !== 'custom') {
             throw new \Exception($this->l->t('Server error: filetype not allowed.'));
             return false;
         }

@@ -18,6 +18,19 @@
 
 <div id="container">
 
+<div id="freeCreate" class="dataBlock">
+    <p class="header"><?php p($l->t('Request a restoration')); ?></p>
+    <div>
+        <input type="text" name="filename" placeholder="<?php p($l->t('Enter a directory name or a file name you want to restore')) ?>" />
+        <select name="version">
+            <?php foreach ($_['versions'] as $version): ?>
+            <option value="<?php p($version['version']); ?>"><?php p($version['label']); ?></option>
+            <?php endforeach; ?>
+        </select>
+        <input type="button" value="<?php p($l->t("Send")); ?>">
+    </div>
+</div>
+
 <div id="todo" class="dataBlock">
     <p class="header"><?php p($l->t('To be processed')); ?></p>
     <?php foreach($_['todos'] as $todo): ?>

@@ -19,6 +19,38 @@
     border-radius: 5px;
     padding-bottom: 0.5em;
 }
+#freeCreate {
+    display: block;
+    width: 58%;
+    padding-bottom: 0;
+}
+#freeCreate p.header {
+    width: 25%;
+    float:left ;
+    font-weight: bold;
+    background-color: #eee;
+    padding: 1em;
+    margin-left:0;
+    margin-right:0;
+}
+#freeCreate div {
+    float: left;
+    padding-left: 1em;
+    vertical-align: middle;
+}
+#freeCreate div input {
+    width: 30em;
+    margin-top: 10px;
+}
+#freeCreate div input[type=button] {
+    width: 10em;
+}
+#freecreate div select {
+    margin-left: 1em;
+}
+#todo {
+    clear: both;
+}
 #todo p.header {
     background: url("../img/todo.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
 }

@@ -16,6 +16,7 @@ use \OCP\IL10N;
 
 use \OCA\User_Files_Restore\Service\RequestService;
 use \OCA\User_Files_Restore\Db\Request;
+use \OCA\User_Files_Restore\lib\Helper;
 
 class PageController extends Controller {
 
@@ -37,6 +38,19 @@ class PageController extends Controller {
      * @NoCSRFRequired
      */
     public function index() {
+        // get versions
+        $confVersions = Helper::getVersions();
+        $versions = array();
+        if (is_array($confVersions)) {
+            foreach($confVersions as $confVersion) {
+                $version = array();
+                $version['version'] = $confVersion;
+                $version['label'] = $confVersion . " " . $this->l->n("day", "days", $confVersion);
+
+                array_push($versions, $version);
+            }
+        }
+
         // get all todo, running and done requests
         $todos = $runnings = $dones = array();
 
@@ -48,6 +62,7 @@ class PageController extends Controller {
         $dones = $this->requestService->getDones();
 
         return $this->render('main', array(
+            'versions' => $versions,
             'todos' => $todos,
             'runnings' => $runnings,
             'dones' => $dones,

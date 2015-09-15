@@ -23,5 +23,8 @@ $TRANSLATIONS = array(
 "Done" => "Traité",
 "file" => "fichier",
 "dir" => "dossier",
+"_day_::_days_" => array("jour", "jours"),
+'Request a restoration' => 'Demander une restauration',
+"Send" => "Envoyer",
 );
 $PLURAL_FORMS = "nplurals=2; plural=(n > 1);";
