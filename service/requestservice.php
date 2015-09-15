@@ -16,6 +16,8 @@ use \OCP\IL10N;
 
 class RequestService
 {
+    const MAX_LENGTH = 30;
+
     protected $requestMapper;
     protected $userId;
     protected $l;
@@ -37,7 +39,8 @@ class RequestService
             $todo = array();
             $todo['id'] = $request->getid();
             $todo['mime'] = $this->l->t($request->getFiletype());
-            $todo['file'] = $request->getPath();
+            $todo['complete_filename'] = $request->getPath();
+            $todo['file'] = $this->shortenPath($request->getPath());
             $todo['version'] = $request->getVersion();
             array_push($todos, $todo);
         }
@@ -54,7 +57,8 @@ class RequestService
         foreach($requests as $request) {
             $running = array();
             $running['mime'] = $this->l->t($request->getFiletype());
-            $running['file'] = $request->getPath();
+            $running['complete_filename'] = $request->getPath();
+            $running['file'] = $this->shortenPath($request->getPath());
             array_push($runnings, $running);
         }
 
@@ -70,11 +74,23 @@ class RequestService
         foreach($requests as $request) {
             $done = array();
             $done['mime'] = $this->l->t($request->getFiletype());
-            $done['file'] = $request->getPath();
+            $done['complete_filename'] = $request->getPath();
+            $done['file'] = $this->shortenPath($request->getPath());
             $done['dateEnd'] = $request->getDateEnd();
+            $done['error'] = $request->getErrorCode();
             array_push($dones, $done);
         }
 
         return $dones;
+    }
+
+    protected function shortenPath($path)
+    {
+        if (isset($path[self::MAX_LENGTH])) {
+            $len = self::MAX_LENGTH - 3;
+            $path = "..." . mb_substr($path, -$len);
+        }
+
+        return $path;
     }
 }

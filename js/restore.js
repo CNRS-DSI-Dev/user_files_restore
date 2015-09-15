@@ -20,7 +20,10 @@ $(document).ready(function(){
             var file = $('#freeCreate input[name=filename]').val()
             var version = $('#freeCreate option:selected').val();
             restoreFile(file, version, 'custom', true);
-        })
+        });
+
+        $('#running p.header img').tipsy({html: true });
+        $('#done span.errorback img').tipsy({html: true });
     }
 
     if (OCA.Files) {

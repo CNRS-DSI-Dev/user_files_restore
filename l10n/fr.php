@@ -17,6 +17,7 @@ $TRANSLATIONS = array(
 "Failed to get versions." => "Échec à la récupération des versions.",
 "Failed to cancel Restore request." => "Échec lors de l'annulation de la requête.",
 "Restoration requests" => "Requêtes de restauration",
+'Requests are not processed in real time. Please refer to the documentation.' => "Les demandes ne sont pas traitées en temps réel. Pour plus de détails, merci de vous référer à la documentation.",
 "To be processed" => "A traiter",
 "Cancel" => "Annuler",
 "Running" => "En cours",
@@ -24,6 +25,7 @@ $TRANSLATIONS = array(
 "file" => "fichier",
 "dir" => "dossier",
 "_day_::_days_" => array("jour", "jours"),
+"d - " => "j - ",
 'Request a restoration' => 'Demander une restauration',
 "Send" => "Envoyer",
 );

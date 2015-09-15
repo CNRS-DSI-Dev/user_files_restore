@@ -35,25 +35,41 @@
     <p class="header"><?php p($l->t('To be processed')); ?></p>
     <?php foreach($_['todos'] as $todo): ?>
     <p id="<?php p($todo['id']); ?>">
-        <?php p($todo['file']); ?>
-        <span>(<?php p($todo['mime']); ?> ; </span>
-        <span><?php p($todo['version']); ?>)</span>
-        <span class="cancel" data-id="<?php p($todo['id']); ?>" data-version="<?php p($todo['version']); ?>"><?php p($l->t('Cancel')); ?></span>
+        <span title="<?php p($todo['complete_filename']); ?>"><?php p($todo['file']); ?><span>
+        <span class="bonus">(<?php p($todo['mime']); ?> ; </span>
+        <span class="bonus"><?php p($l->t('d - ') . $todo['version']); ?>)</span>
+        <span class="cancel bonus" data-id="<?php p($todo['id']); ?>" data-version="<?php p($todo['version']); ?>"><?php p($l->t('Cancel')); ?></span>
     </p>
     <?php endforeach; ?>
 </div>
 
 <div id="running" class="dataBlock">
-    <p class="header"><?php p($l->t('Running')); ?></p>
+    <p class="header">
+        <?php p($l->t('Running')); ?>
+        <img src="<?php print_unescaped(image_path('user_files_restore', 'help.png')) ?>" title='<?php print_unescaped($l->t('Requests are not processed in real time. Please refer to the documentation.')); ?>' />
+    </p>
     <?php foreach($_['runnings'] as $running): ?>
-    <p><span>(<?php p($running['mime']); ?>)</span> <?php p($running['file']); ?></span> </p>
+    <p>
+        <span class="bonus">(<?php p($running['mime']); ?>)</span>
+        <span title="<?php p($running['complete_filename']); ?>"><?php p($running['file']); ?></span>
+    </p>
     <?php endforeach; ?>
 </div>
 
 <div id="done" class="dataBlock">
     <p class="header"><?php p($l->t('Done')); ?></span></p>
     <?php foreach($_['dones'] as $done): ?>
-    <p><span>(<?php p($done['mime']); ?>)</span> <?php p($done['file']); ?> <span class="date"><?php p($done['dateEnd']); ?></span> </p>
+    <p>
+        <span class="bonus">(<?php p($done['mime']); ?>)</span>
+        <span title="<?php p($done['complete_filename']); ?>"><?php p($done['file']); ?></span>
+        <span class="errorback">
+            <?php if (!empty($done['error'])): ?>
+            <img src="<?php print_unescaped(image_path('user_files_restore', 'exclamation.png')) ?>" title="<?php print_unescaped($done['error']); ?>" /></span>
+            <?php else: ?>
+            &nbsp;</span>
+            <?php endif; ?>
+        <span class="date bonus"><?php p($done['dateEnd']); ?></span>
+    </p>
     <?php endforeach; ?>
 </div>
 

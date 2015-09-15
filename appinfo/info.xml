@@ -2,7 +2,7 @@
 <info>
     <id>user_files_restore</id>
     <name>User File Restore</name>
-    <description>Allows the user to restore files.</description>
+    <description>Dedicated My CoRe platform app, allowing the user to request files restoration from Tivoli backup. Restoration itself is processed by external scripts (see https://github.com/CNRS-DSI-Dev/mycore_backup_restore_user_files).</description>
     <version>0.1</version>
     <licence>AGPLv3</licence>
     <author>Patrick Paysant / CNRS</author>

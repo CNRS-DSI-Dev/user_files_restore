@@ -72,11 +72,20 @@
     margin-right:0;
     margin-bottom: 0.5em;
 }
-.dataBlock p span {
+.dataBlock p span.bonus {
     opacity: 0.5;
 }
-#done p span.date, #todo p span.cancel {
+#done p span.date, #todo p span.cancel, #done p span.errorback {
 	float: right;
+}
+#done p span.errorback {
+    opacity: 1;
+    min-width: 26px; /* if there's no error picto, keep aligned */
+}
+#done p span.errorback img {
+    padding-left: 10px;
+    position: relative;
+    top: 2px;
 }
 #todo p span.cancel:hover {
 	opacity: 1;
