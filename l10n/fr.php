@@ -17,6 +17,7 @@ $TRANSLATIONS = array(
 "Failed to get versions." => "Échec à la récupération des versions.",
 "Failed to cancel Restore request." => "Échec lors de l'annulation de la requête.",
 "Restoration requests" => "Requêtes de restauration",
+"Enter a directory name or a file name you want to restore" => "Saisissez le nom du fichier / dossier que vous souhaitez restaurer",
 "You also can request a restoration on the application default page." => "Vous pouvez également restaurer des éléments en passant par la page par défaut de l'applicatif.",
 'Requests are not processed in real time. Please refer to the documentation.' => "Les demandes ne sont pas traitées en temps réel. Pour plus de détails, merci de vous référer à la documentation.",
 "To be processed" => "A traiter",
