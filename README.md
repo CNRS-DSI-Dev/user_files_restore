@@ -29,11 +29,13 @@ Note that this feature allows to request a restoration on the whole directory. J
 
 A command line script is provided, allowing to delete the old entries in the table `oc_userfiles_restore`.
 
-You need to set a key in config.php, to set the number of days you want to keep closed requests in database.
+You need to set a key in `config.php`, to set the number of days you want to keep closed requests in database.
 
 ```php
  'ufr_clean_delay' => 30,
 ```
+
+Without this key in `config.php`, the delay will be set to `7`.
 
 To clean the `oc_user_files_restore` table, use
 
