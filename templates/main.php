@@ -27,7 +27,7 @@
             <option value="<?php p($version['version']); ?>"><?php p($version['label']); ?></option>
             <?php endforeach; ?>
         </select>
-        <input type="button" value="<?php p($l->t("Send")); ?>">
+        <input type="button" value="<?php p($l->t("Validate")); ?>">
     </div>
 </div>
 

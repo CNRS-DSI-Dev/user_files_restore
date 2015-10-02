@@ -29,6 +29,6 @@ $TRANSLATIONS = array(
 "_day_::_days_" => array("jour", "jours"),
 "d - " => "j - ",
 'Request a restoration' => 'Demander une restauration',
-"Send" => "Envoyer",
+"Validate" => "Valider",
 );
 $PLURAL_FORMS = "nplurals=2; plural=(n > 1);";
