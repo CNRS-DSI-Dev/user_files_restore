@@ -22,6 +22,7 @@ $(document).ready(function(){
             restoreFile(file, version, 'custom', true);
         });
 
+        $('#freeCreate p.header img').tipsy({html: true });
         $('#running p.header img').tipsy({html: true });
         $('#done span.errorback img').tipsy({html: true });
     }
