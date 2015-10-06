@@ -57,6 +57,12 @@
 #running p.header {
     background: url("../img/running2.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
 }
+#running p.header span {
+    font-style: italic;
+    font-weight: normal;
+    font-size: 80%;
+    float: right;
+}
 #done p.header {
     background: url("../img/done2.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
 }

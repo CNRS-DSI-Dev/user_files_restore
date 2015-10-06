@@ -84,6 +84,20 @@ class RequestService
         return $dones;
     }
 
+    public function getPrecedingNb()
+    {
+        $precedingNb = 0;
+
+        try {
+            $precedingNb = $this->requestMapper->getPrecedingRequests($this->userId);
+        }
+        catch (\Exception $e) {
+            // nothing for now
+        }
+
+        return $precedingNb;
+    }
+
     protected function shortenPath($path)
     {
         if (isset($path[self::MAX_LENGTH])) {

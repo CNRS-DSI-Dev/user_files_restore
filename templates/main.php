@@ -46,6 +46,9 @@
     <p class="header">
         <?php p($l->t('Running')); ?>
         <img src="<?php print_unescaped(image_path('user_files_restore', 'help.png')) ?>" title='<?php print_unescaped($l->t('Requests are not processed in real time. Please refer to the documentation.')); ?>' />
+        <?php if ($_['precedingRequests'] > 0): ?>
+        <span><?php p($l->t("You have %d request(s) before yours to be processed.", $_['precedingRequests'])) ;?></span>
+        <?php endif ?>
     </p>
     <?php foreach($_['runnings'] as $running): ?>
     <p>

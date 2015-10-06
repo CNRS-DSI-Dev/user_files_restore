@@ -61,11 +61,15 @@ class PageController extends Controller {
         $runnings = $this->requestService->getRunnings();
         $dones = $this->requestService->getDones();
 
+        // get number of preceding requests
+        $precedingNb = $this->requestService->getPrecedingNb();
+
         return $this->render('main', array(
             'versions' => $versions,
             'todos' => $todos,
             'runnings' => $runnings,
             'dones' => $dones,
+            'precedingRequests' => $precedingNb,
         ));
     }
 

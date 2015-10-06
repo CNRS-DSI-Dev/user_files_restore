@@ -38,6 +38,7 @@ class RequestMapper extends Mapper
      * @param  int $limit
      * @param  int $offset
      * @return OCA\User_Files_Restore\Db\request The created request
+     * @throws \Exception
      */
     public function saveRequest($uid, $path, $version, $filetype, $dateCreate=null, $limit=null, $offset=null)
     {
@@ -109,6 +110,7 @@ class RequestMapper extends Mapper
      * @param  int    $uid      User identifier
      * @param  string $id       Request identifier
      * @return OCA\User_Files_Restore\Db\request The created request
+     * @throws \Exception
      */
     public function cancelRequest($uid, $id)
     {
@@ -148,5 +150,31 @@ class RequestMapper extends Mapper
         }
 
         return true;
+    }
+
+    /**
+     * Get number of requests preceding the user's ones.
+     * @param  string $uid User ID
+     * @return int/false
+     * @throws  \Exception
+     */
+    function getPrecedingRequests($uid)
+    {
+        $sql = "SELECT COUNT(id)as nb FROM oc_user_files_restore
+            WHERE date_request < (
+                SELECT MIN(date_request)
+                FROM oc_user_files_restore
+                WHERE uid = ?
+            )";
+
+        try {
+            $row = $this->findOneQuery($sql, array($uid));
+        }
+        catch (\Exception $e) {
+            throw new \Exception($this->l->t('fail to get preceding requests.'));
+            return false;
+        }
+
+        return $row['nb'];
     }
 }
