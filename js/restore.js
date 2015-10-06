@@ -16,10 +16,15 @@ $(document).ready(function(){
     }
 
     if ($('#freeCreate input[type=button]')) {
-        $('#freeCreate input[type=button]').on('click', function() {
-            var file = $('#freeCreate input[name=filename]').val()
-            var version = $('#freeCreate option:selected').val();
-            restoreFile(file, version, 'custom', true);
+        $('#freeCreate input[type=button]').on('click', function(event) {
+            // ask to confirm
+            event.preventDefault();
+            OCdialogs.confirm(
+                t('user_files_restore', 'Are you sure to CONFIRM this global restoration request? All your files will be overwritten by this restoration.'),
+                t('user_files_migrate', 'Confirm global migration request'),
+                confirmGlobalRestorationRequest,
+                true
+            );
         });
 
         $('#freeCreate p.header img').tipsy({html: true });
@@ -65,7 +70,7 @@ $(document).ready(function(){
         var revision = $(this).attr('id');
         var file = $(this).attr('value');
         var type = $(this).attr('data-type');
-        restoreFile(file, revision, type);
+        restoreFile(file, revision, type, false);
     });
 
     $('#todo').on('click', 'span.cancel', function() {
@@ -74,7 +79,16 @@ $(document).ready(function(){
     });
 });
 
-function restoreFile(file, revision, type, freeCreate=false) {
+function confirmGlobalRestorationRequest(response) {
+    if (response == false) {
+        return;
+    }
+
+    var version = $('#freeCreate option:selected').val();
+    restoreFile('/', version, 'dir', true);
+}
+
+function restoreFile(file, revision, type, freeCreate) {
     $.ajax({
         type: 'POST',
         url: OC.generateUrl('apps/user_files_restore/api/1.0/request'),
@@ -145,7 +159,6 @@ function restoreFile(file, revision, type, freeCreate=false) {
             }
         }
     });
-
 }
 
 function createRestoreDropdown(filename, files, fileList) {
@@ -220,14 +233,12 @@ function createRestoreDropdown(filename, files, fileList) {
 
 $(this).click(
     function(event) {
-    if ($('#dropdown').has(event.target).length === 0 && $('#dropdown').hasClass('drop-versions')) {
-        $('#dropdown').hide('blind', function() {
-            $('#dropdown').remove();
-            $('tr').removeClass('mouseOver');
-        });
-    }
-
-
+        if ($('#dropdown').has(event.target).length === 0 && $('#dropdown').hasClass('drop-versions')) {
+            $('#dropdown').hide('blind', function() {
+                $('#dropdown').remove();
+                $('tr').removeClass('mouseOver');
+            });
+        }
     }
 );
 

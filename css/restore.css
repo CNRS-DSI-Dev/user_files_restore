@@ -9,7 +9,7 @@
 #container {
     margin-left: 1em;
 }
-.dataBlock {
+.user_files_restore .dataBlock {
     font-size: 120%;
     width: 28%;
     float: left;
@@ -21,11 +21,11 @@
 }
 #freeCreate {
     display: block;
-    width: 58%;
+    width: 35%;
     padding-bottom: 0;
 }
 #freeCreate p.header {
-    width: 25%;
+    width: 55%;
     float:left ;
     font-weight: bold;
     background-color: #eee;
@@ -60,7 +60,7 @@
 #done p.header {
     background: url("../img/done2.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
 }
-.dataBlock p {
+.user_files_restore .dataBlock p {
     margin-left: 1em;
     margin-right: 1em;
 }
@@ -72,11 +72,11 @@
     margin-right:0;
     margin-bottom: 0.5em;
 }
-.dataBlock p span.bonus {
+.user_files_restore .dataBlock p span.bonus {
     opacity: 0.5;
 }
 #done p span.date, #todo p span.cancel, #done p span.errorback {
-	float: right;
+    float: right;
 }
 #done p span.errorback {
     opacity: 1;
@@ -88,14 +88,14 @@
     top: 2px;
 }
 #todo p span.cancel:hover {
-	opacity: 1;
+    opacity: 1;
 }
 #todo p span.cancel {
-	cursor: pointer;
+    cursor: pointer;
 }
 #todo p.error {
-	background-color: red;
-	color: white;
+    background-color: red;
+    color: white;
 }
 #footer {
     clear: both;
@@ -107,56 +107,56 @@
 /** OVERLAY **/
 
 #dropdown.drop-versions {
-	width: 360px;
+    width: 360px;
 }
 #available_versions li {
-	width: 100%;
-	cursor: default;
-	height: 56px;
-	float: left;
-	border-bottom: 1px solid rgba(100,100,100,.1);
+    width: 100%;
+    cursor: default;
+    height: 56px;
+    float: left;
+    border-bottom: 1px solid rgba(100,100,100,.1);
 }
 #available_versions li:last-child {
-	border-bottom: none;
+    border-bottom: none;
 }
 #available_versions li > * {
-	padding: 7px;
-	float: left;
-	vertical-align: top;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-	filter: alpha(opacity=50);
-	opacity: .5;
+    padding: 7px;
+    float: left;
+    vertical-align: top;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    opacity: .5;
 }
 #available_versions li span.versionName,
 #available_versions li > span {
-	padding: 17px 7px;
+    padding: 17px 7px;
 }
 #available_versions li > span:hover,
 #available_versions li > span:focus {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-	filter: alpha(opacity=100);
-	opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: alpha(opacity=100);
+    opacity: 1;
 }
 #available_versions li span.versionName {
-	opacity: .5;
+    opacity: .5;
 }
 #available_versions img {
-	cursor: pointer;
-	padding-right: 4px;
+    cursor: pointer;
+    padding-right: 4px;
 }
 #available_versions img.preview {
-	cursor: default;
-	opacity: 1;
+    cursor: default;
+    opacity: 1;
 }
 #available_versions .versionDate {
-	min-width: 100px;
-	vertical-align: text-bottom;
+    min-width: 100px;
+    vertical-align: text-bottom;
 }
 #available_versions .restoreVersion {
-	cursor: pointer;
-	float: right;
-	max-width: 130px;
-	text-overflow: ellipsis;
-	overflow: hidden;
+    cursor: pointer;
+    float: right;
+    max-width: 130px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 

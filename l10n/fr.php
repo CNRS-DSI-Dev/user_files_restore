@@ -28,7 +28,8 @@ $TRANSLATIONS = array(
 "dir" => "dossier",
 "_day_::_days_" => array("jour", "jours"),
 "d - " => "j - ",
-'Request a restoration' => 'Demander une restauration',
+'Request a complete restoration' => 'Demander une restauration complète',
+"Are you sure to CONFIRM this global restoration request? All your files will be overwritten by this restoration." => "Êtes vous certain de vouloir restauration complète. Cela va écraser tous vos fichiers actuels.",
 "Validate" => "Valider",
 );
 $PLURAL_FORMS = "nplurals=2; plural=(n > 1);";

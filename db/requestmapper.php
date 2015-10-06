@@ -92,11 +92,11 @@ class RequestMapper extends Mapper
         }
         else{
             if ($status == 0) {
-                $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ?";
+                $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ? ORDER BY date_request ASC";
                 $requests = $this->findEntities($sql, array($uid), $limit, $offset);
             }
             else {
-                $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ? AND status = ?";
+                $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ? AND status = ? ORDER BY date_request ASC";
                 $requests = $this->findEntities($sql, array($uid, $status), $limit, $offset);
             }
         }

@@ -16,12 +16,11 @@
     <?php p($l->t('Restoration requests')); ?>
 </div>
 
-<div id="container">
+<div id="container" class="user_files_restore">
 
 <div id="freeCreate" class="dataBlock">
-    <p class="header"><?php p($l->t('Request a restoration')); ?> <img src="<?php print_unescaped(image_path('user_files_restore', 'help.png')) ?>" title="<?php print_unescaped($l->t("You also can request a restoration on the application default page.")); ?>" /></p>
+    <p class="header"><?php p($l->t('Request a complete restoration')); ?> <img src="<?php print_unescaped(image_path('user_files_restore', 'help.png')) ?>" title="<?php print_unescaped($l->t("You also can request a restoration on the application default page.")); ?>" /></p>
     <div>
-        <input type="text" name="filename" placeholder="<?php p($l->t('Enter a directory name or a file name you want to restore')) ?>" />
         <select name="version">
             <?php foreach ($_['versions'] as $version): ?>
             <option value="<?php p($version['version']); ?>"><?php p($version['label']); ?></option>
