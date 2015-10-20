@@ -9,8 +9,10 @@
 #container {
     margin-left: 1em;
 }
+.user_files_restore .clearfix {
+    clear: both;
+}
 .user_files_restore .dataBlock {
-    font-size: 120%;
     width: 28%;
     float: left;
     margin-right: 2em;
@@ -19,87 +21,134 @@
     border-radius: 5px;
     padding-bottom: 0.5em;
 }
-#freeCreate {
-    display: block;
-    width: 35%;
-    padding-bottom: 0;
+.user_files_restore .dataBlock p {
+    margin-left: 1em;
+    margin-right: 1em;
+    font-size: 120%;
 }
-#freeCreate p.header {
-    width: 55%;
-    float:left ;
+.user_files_restore .dataBlock p.header {
     font-weight: bold;
     background-color: #eee;
-    padding: 1em;
     margin-left:0;
     margin-right:0;
+    background-color: #eee;
+    background-attachment: scroll;
+    background-repeat: no-repeat;
+    margin-bottom: 0.5em;
+    background-position: 5px 12px;
+    padding: 1em 1em 1em 45px;
 }
-#freeCreate div {
+.user_files_restore .dataBlock p span.bonus {
+    opacity: 0.5;
+}
+.user_files_restore #infos {
+    width: 50%;
+    padding: 1em;
+    background-color: #cee;
+    color: #000;
+}
+.user_files_restore #infos h2 {
+    font-weight: bold;
+    font-size: 120%;
+    margin: 0 1em 0.5em ;
+}
+.user_files_restore #infos__detail {
+    font-size: 120%;
+}
+.user_files_restore #infos__detail .highlight {
+    background-color: #666;
+    color: #ffd;
+}
+.user_files_restore ul {
+    padding-left: 1rem;
+    list-style-type: disc;
+}
+.user_files_restore ul li {
+    padding: 3px;
+}
+.user_files_restore #infos__detail #crypto {
+    color: #577;
+    font-weight: bold;
+}
+.user_files_restore #freeCreate {
+    display: block;
+    width: 36%;
+    padding-bottom: 0;
+}
+.user_files_restore #freeCreate p.header {
+    width: 55%;
+    float:left;
+    margin-bottom: 0;
+    padding: 1em;
+}
+.user_files_restore #freeCreate div {
     float: left;
     padding-left: 1em;
     vertical-align: middle;
 }
-#freeCreate div input {
-    width: 30em;
+.user_files_restore #freeCreate div input {
     margin-top: 10px;
 }
-#freeCreate div input[type=button] {
+.user_files_restore #freeCreate div input[type=button] {
     width: 10em;
 }
-#freecreate div select {
+.user_files_restore #freecreate div select {
     margin-left: 1em;
 }
-#todo {
-    clear: both;
+.user_files_restore #todo p.header {
+    background-image: url("../img/todo.png");
 }
-#todo p.header {
-    background: url("../img/todo.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
+.user_files_restore #running p.header {
+    background-image: url("../img/running2.png");
 }
-#running p.header {
-    background: url("../img/running2.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
-}
-#running p.header span {
+.user_files_restore #running p.header span {
     font-style: italic;
     font-weight: normal;
     font-size: 80%;
     float: right;
 }
-#done p.header {
-    background: url("../img/done2.png") no-repeat scroll 5px 12px rgba(0, 0, 0, 0);
+.user_files_restore #done {
+    width: 35%;
 }
-.user_files_restore .dataBlock p {
-    margin-left: 1em;
-    margin-right: 1em;
+.user_files_restore #done p {
+    margin-bottom: 0.2rem;
+    padding-left: 3px;
 }
-#todo.dataBlock p.header, #running.dataBlock p.header, #done.dataBlock p.header {
-    font-weight: bold;
-    background-color: #eee;
-    padding: 1em 1em 1em 45px;
-    margin-left:0;
-    margin-right:0;
-    margin-bottom: 0.5em;
+.user_files_restore #done p.error {
+    background-color: #fdd;
+    border: 1px solid #f99;
+    border-radius: 2px;
 }
-.user_files_restore .dataBlock p span.bonus {
-    opacity: 0.5;
+.user_files_restore #done p.header {
+    background-image: url("../img/done2.png");
+    margin-bottom: 5px;
+    padding-left: 45px;
 }
-#done p span.date, #todo p span.cancel, #done p span.errorback {
+.user_files_restore #done p span.date, #todo p span.cancel, #done p span.errorback {
     float: right;
 }
-#done p span.errorback {
+.user_files_restore #done p span.errorback {
+    color: red;
+    font-weight: bold;
+    min-width: 6rem; /* if there's no error picto, keep aligned */
     opacity: 1;
-    min-width: 26px; /* if there's no error picto, keep aligned */
+    padding: 0 0.6rem;
 }
-#done p span.errorback img {
+.user_files_restore #done p span.errorback img {
     padding-left: 10px;
     position: relative;
     top: 2px;
 }
-#todo p span.cancel:hover {
+.user_files_restore #done p span.errorback span {
+    color: #000;
+}
+.user_files_restore #todo p span.cancel:hover {
     opacity: 1;
 }
-#todo p span.cancel {
+.user_files_restore #todo p span.cancel {
     cursor: pointer;
 }
-#todo p.error {
+.user_files_restore #todo p.error {
     background-color: red;
     color: white;
 }

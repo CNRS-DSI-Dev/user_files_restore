@@ -27,9 +27,26 @@ $(document).ready(function(){
             );
         });
 
-        $('#freeCreate p.header img').tipsy({html: true });
-        $('#running p.header img').tipsy({html: true });
-        $('#done span.errorback img').tipsy({html: true });
+        // $('#freeCreate p.header img').tipsy({html: true });
+        // $('#running p.header img').tipsy({html: true });
+        $('#done span.errorback span').tipsy({html: true });
+
+        $('#freeCreate p.header img').hover(
+            function() {
+                $('#infos__detail .freeCreate').addClass('highlight');
+            },
+            function() {
+                $('#infos__detail .freeCreate').removeClass('highlight');
+            }
+        );
+        $('#running p.header img').hover(
+            function() {
+                $('#infos__detail .running').addClass('highlight');
+            },
+            function() {
+                $('#infos__detail .running').removeClass('highlight');
+            }
+        );
     }
 
     if (OCA.Files) {
