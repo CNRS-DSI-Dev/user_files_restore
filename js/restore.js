@@ -49,6 +49,7 @@ $(document).ready(function(){
         );
     }
 
+    // Files list overlay
     if (OCA.Files) {
         // Add versions button to 'files/index.php'
         OCA.Files.fileActions.register(
@@ -87,7 +88,27 @@ $(document).ready(function(){
         var revision = $(this).attr('id');
         var file = $(this).attr('value');
         var type = $(this).attr('data-type');
-        restoreFile(file, revision, type, false);
+
+        // ask confirmation
+        OCdialogs
+            .confirm(
+                t('user_files_restore', '____________________________________________'),
+                t('user_files_restore', 'Confirm your restoration request'),
+                function(ok) {
+                    if (ok) {
+                        restoreFile(file, revision, type, false);
+                    }
+                },
+                true)
+            .then(function() {
+                var contentDiv = $('div.oc-dialog-content p');
+
+                var msg = t('user_files_restore', "Are you sure to restore to D-{version} version ?", {version:revision}) + "</br></br>";
+                msg = msg + t('user_files_restore', "Once restored, the present version will be overridden.") + "</br>";
+
+                contentDiv.html(msg);
+            });
+
     });
 
     $('#todo').on('click', 'span.cancel', function() {
