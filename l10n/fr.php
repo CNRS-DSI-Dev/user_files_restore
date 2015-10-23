@@ -30,6 +30,7 @@ $TRANSLATIONS = array(
 "Done" => "Traité",
 "file" => "fichier",
 "dir" => "dossier",
+"_%n day ago_::_%n days ago_" => array("%n jour avant", "%n jours avant"),
 "_day_::_days_" => array("jour", "jours"),
 "d - " => "j - ",
 'Request a complete restoration' => 'Demander une restauration complète',

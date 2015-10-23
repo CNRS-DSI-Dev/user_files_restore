@@ -244,7 +244,7 @@ function createRestoreDropdown(filename, files, fileList) {
 
     function addRestoreVersion(version) {
         var download='<span class="versionName">';
-        download+=version + " day(s) ago</span>";
+        download += n('user_files_restore', "%n day ago", "%n days ago", version) + "</span>";
 
         var revert='<span class="restoreVersion"';
         revert+=' id="' + version + '"';
