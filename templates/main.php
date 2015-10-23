@@ -23,8 +23,8 @@
     <div id="infos__detail">
         <ul>
             <li class="freeCreate"><?php print_unescaped($l->t("You also can request a restoration on the application default page.")); ?></li>
-            <li class="running"><?php print_unescaped($l->t('Restoration requests are processed as background jobs. You can find on this page the state and results of your requests.<br /><b>Important</b>: restored files will overide (ie delete and replace) existing files with same path and name.')); ?></li>
-            <li id="crypto"><?php print_unescaped($l->t("If you have been targeted by a crypto-virus, please ask your SSI before creating any restoration request.")); ?></li>
+            <li class="running"><?php print_unescaped($l->t("Restoration requests are processed as background jobs. You can find on this page the state and results of your requests.<br /><b>Important</b>: restored files will overide (ie delete and replace) existing files with same path and name.<br />If you want to restore a mistakenly deleted files, have a look on trashbin, it's simpler and quicker.")); ?></li>
+            <li id="crypto"><?php print_unescaped($l->t("If you have been targeted by a crypto-virus, please ask your CSSI / RSSI before creating any restoration request.")); ?></li>
         </ul>
     </div>
 </div>
