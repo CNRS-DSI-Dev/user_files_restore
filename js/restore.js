@@ -21,7 +21,7 @@ $(document).ready(function(){
             event.preventDefault();
             OCdialogs.confirm(
                 t('user_files_restore', 'Are you sure to CONFIRM this global restoration request? All your files will be overwritten by this restoration.'),
-                t('user_files_migrate', 'Confirm global migration request'),
+                t('user_files_restore', 'Confirm global migration request'),
                 confirmGlobalRestorationRequest,
                 true
             );
@@ -41,10 +41,10 @@ $(document).ready(function(){
         );
         $('#running p.header img').hover(
             function() {
-                $('#infos__detail .running').addClass('highlight');
+                $('#infos__detail .running .to_highlight').addClass('highlight');
             },
             function() {
-                $('#infos__detail .running').removeClass('highlight');
+                $('#infos__detail .running .to_highlight').removeClass('highlight');
             }
         );
     }
@@ -150,10 +150,9 @@ function restoreFile(file, revision, type, freeCreate) {
                         t('user_files_restore', 'Restore request'),
                         'info',
                         OCdialogs.OK_BUTTON,
-                        function(ok) {
-                            if (ok) {
-                                // TODO: VIRER LE CALLBACK;
-                                console.log('hop');
+                        function() {
+                            if (freeCreate) {
+                                location.reload();
                             }
                         },
                         true)
