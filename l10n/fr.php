@@ -39,5 +39,6 @@ $TRANSLATIONS = array(
 "Are you sure to CONFIRM this global restoration request? All your files will be overwritten by this restoration." => "Êtes vous certain de vouloir une restauration complète. Cela va écraser tous vos fichiers actuels.",
 "Validate" => "Valider",
 "You have %d request(s) before yours to be processed." => "Il reste %d requêtes à traiter avant les votres.",
+"Prior information" => "Informations préalables",
 );
 $PLURAL_FORMS = "nplurals=2; plural=(n > 1);";

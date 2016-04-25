@@ -21,6 +21,7 @@ class Request extends Entity {
     protected $status;
     protected $dateEnd;
     protected $errorCode;
+    protected $userDateRequest;
 
     public function __construct() {
         $this->addType('version', 'integer');
