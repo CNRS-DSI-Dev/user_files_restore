@@ -170,8 +170,8 @@ class RequestMapper extends Mapper
             WHERE date_request < (
                 SELECT MIN(date_request)
                 FROM oc_user_files_restore
-                WHERE status = " . self::STATUS_RUNNING . " AND uid = ?
-            ) AND status = " .self::STATUS_RUNNING;
+                WHERE status != " . self::STATUS_DONE . " AND uid = ?
+            ) AND status != " . self::STATUS_DONE;
 
         try {
             $row = $this->findOneQuery($sql, array($uid));
