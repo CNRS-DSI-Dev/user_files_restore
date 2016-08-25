@@ -127,11 +127,21 @@ function confirmGlobalRestorationRequest(response) {
 }
 
 function restoreFile(file, revision, type, freeCreate) {
+    var currentdate = new Date();
+    // formating date
+    var userdate =  currentdate.getFullYear() + '-';
+    if (currentdate.getMonth() + 1 < 10) {
+        userdate += '0' + (currentdate.getMonth() + 1) + '-';
+    } else {
+        userdate += (currentdate.getMonth() + 1) + '-';
+    }
+    userdate += currentdate.getDate() + ' ' + currentdate.getHours() + ':' + currentdate.getMinutes() + ':' + currentdate.getSeconds();
+
     $.ajax({
         type: 'POST',
         url: OC.generateUrl('apps/user_files_restore/api/1.0/request'),
         dataType: 'json',
-        data: {file: file, version: revision, filetype: type},
+        data: {file: file, version: revision, filetype: type, userdate: userdate},
         async: false,
         success: function(response) {
             if (response.status === 'error') {

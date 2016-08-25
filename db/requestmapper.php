@@ -35,12 +35,13 @@ class RequestMapper extends Mapper
      * @param  string $path     path to the file (or directory) to restore, relative to user's home dir (in owncloud)
      * @param  int    $version  The resource's version taken (if possible) nb of days before today (should be 1, 6 or 15 days)
      * @param  string $filetype File type ('file' or 'dir')
+     * @param  string    $userdate    User browser's date
      * @param  int $limit
      * @param  int $offset
      * @return OCA\User_Files_Restore\Db\request The created request
      * @throws \Exception
      */
-    public function saveRequest($uid, $path, $version, $filetype, $dateCreate=null, $limit=null, $offset=null)
+    public function saveRequest($uid, $path, $version, $filetype, $userdate, $dateCreate=null, $limit=null, $offset=null)
     {
         if ($filetype !== 'file' and $filetype !== 'dir' and $filetype !== 'custom') {
             throw new \Exception($this->l->t('Server error: filetype not allowed.'));
@@ -48,6 +49,7 @@ class RequestMapper extends Mapper
         }
 
         $sql = "SELECT * FROM *PREFIX*user_files_restore WHERE uid = ? AND path = ? AND status = " . self::STATUS_TODO;
+
         try {
             $request = $this->findEntity($sql, array($uid, $path), $limit, $offset);
 
@@ -69,6 +71,10 @@ class RequestMapper extends Mapper
         else {
             $request->setDateRequest(date('Y-m-d H:i:s'));
         }
+
+
+        $request->setUserDateRequest($userdate);
+
         $request->setPath($path);
         $request->setFiletype($filetype);
         $request->setVersion((int)$version);
@@ -160,12 +166,12 @@ class RequestMapper extends Mapper
      */
     function getPrecedingRequests($uid)
     {
-        $sql = "SELECT COUNT(id)as nb FROM oc_user_files_restore
+        $sql = "SELECT COUNT(id) as nb FROM oc_user_files_restore
             WHERE date_request < (
                 SELECT MIN(date_request)
                 FROM oc_user_files_restore
-                WHERE uid = ?
-            )";
+                WHERE status != " . self::STATUS_DONE . " AND uid = ?
+            ) AND status != " . self::STATUS_DONE;
 
         try {
             $row = $this->findOneQuery($sql, array($uid));

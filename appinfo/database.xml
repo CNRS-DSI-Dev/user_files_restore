@@ -55,6 +55,10 @@
                 <type>text</type>
                 <length>255</length>
             </field>
+            <field>
+                <name>user_date_request</name>
+                <type>timestamp</type>
+            </field>
         </declaration>
     </table>
 </database>

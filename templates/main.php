@@ -19,7 +19,7 @@
 <div id="container" class="user_files_restore">
 
 <div id="infos" class="dataBlock">
-    <h2>Informations préalables</h2>
+    <h2><?php print_unescaped($l->t('Prior information')); ?></h2>
     <div id="infos__detail">
         <ul>
             <li><?php print_unescaped($l->t("If you want to restore a mistakenly deleted files, have a look on trashbin, it's simpler and quicker.")); ?></li>

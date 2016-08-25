@@ -70,17 +70,24 @@ class RequestService
         $dones = array();
 
         $requests = $this->requestMapper->getRequests($this->userId, RequestMapper::STATUS_DONE);
-
         foreach($requests as $request) {
             $done = array();
             $done['mime'] = $this->l->t($request->getFiletype());
             $done['complete_filename'] = $request->getPath();
             $done['file'] = $this->shortenPath($request->getPath());
-            $done['dateEnd'] = $request->getDateEnd();
             $done['error'] = $request->getErrorCode();
+
+            $dateStart = strtotime($request->getDateRequest());
+            $dateEnd = strtotime($request->getDateEnd());
+            $dateRequestUser = strtotime($request->getUserDateRequest());
+            if ($dateRequestUser) {
+                $dateUserEnd = $dateRequestUser + ($dateEnd - $dateStart);
+                $done['dateEnd'] = date('Y-m-d H:i:s', $dateUserEnd);
+            } else {
+                $done['dateEnd'] = $request->getDateEnd();
+            }
             array_push($dones, $done);
         }
-
         return $dones;
     }
 

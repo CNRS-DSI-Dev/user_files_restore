@@ -40,13 +40,14 @@ class RequestController extends APIController
      * @param int $version Allowed values are stored in appconfig "versions"
      * @param string $filetype
      */
-    public function create($file, $version, $filetype)
+    public function create($file, $version, $filetype, $userdate)
     {
         $currentRequest = new Request();
         $currentRequest->setUid($this->userId);
         $currentRequest->setPath($file);
         $currentRequest->setVersion($version);
         $currentRequest->setFiletype($filetype);
+        $currentRequest->setUserDateRequest($userdate);
 
         $collision = false;
 
@@ -145,6 +146,7 @@ class RequestController extends APIController
                                 $request->getPath(),
                                 $request->getVersion(),
                                 $request->getFiletype(),
+                                $request->getUserDateRequest(),
                                 $currentDate + $inc
                             );
                         }
@@ -211,7 +213,7 @@ class RequestController extends APIController
         // insert current request
         if (!$collision) {
             try {
-                $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype);
+                $request = $this->requestMapper->saveRequest($this->userId, $file, (int)$version, $filetype, $userdate);
             }
             catch(\Exception $e) {
                 $response = new JSONResponse();
