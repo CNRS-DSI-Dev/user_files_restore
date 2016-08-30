@@ -170,6 +170,10 @@
     height: 56px;
     float: left;
     border-bottom: 1px solid rgba(100,100,100,.1);
+    padding: 2px;
+}
+#available_versions li:hover {
+    background-color: #eee;
 }
 #available_versions li:last-child {
     border-bottom: none;

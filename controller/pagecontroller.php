@@ -56,6 +56,7 @@ class PageController extends Controller {
 
         // TEST DATAS
         // list($todos, $runnings, $dones) = $this->getTestDatas();
+        // $precedingNb = 3 ;
 
         $todos = $this->requestService->getTodos();
         $runnings = $this->requestService->getRunnings();
@@ -111,33 +112,35 @@ class PageController extends Controller {
             array(
                 'mime' => 'file',
                 'file' => '/boo/foo.ls',
-                'dateEnd' => '2015-08-18 15:00:00',
+                'dateEnd' => '2016-08-18 15:00:00',
+                'error' => 'An error message',
             ),
             array(
                 'mime' => 'file',
                 'file' => '/boo/bla.ck',
-                'dateEnd' => '2015-08-18 15:00:00',
+                'dateEnd' => '2016-08-18 15:00:00',
             ),
             array(
                 'mime' => 'file',
                 'file' => '/boo/whi.te',
-                'dateEnd' => '2015-08-18 15:00:00',
+                'dateEnd' => '2016-08-18 15:00:00',
             ),
             array(
                 'mime' => 'dir',
                 'file' => '/boo/colors',
-                'dateEnd' => '2015-08-18 15:00:00',
+                'dateEnd' => '2016-08-18 15:00:00',
+                'error' => 'Another error message, longer, much longer... One that will probably display on more than only one line.',
             ),
             array(
                 'mime' => 'dir',
                 'file' => '/own.cloud',
-                'dateEnd' => '2015-08-18 15:00:00',
+                'dateEnd' => '2016-08-18 15:00:00',
             ),
             array(
                 'mime' => 'file',
                 'file' => '/path/to/the/megafile.long_extension',
-                'dateEnd' => '2015-08-18 15:00:00',
-                'dateEnd' => '2015-08-18 15:00:00',
+                'dateEnd' => '2016-08-18 15:00:00',
+                'dateEnd' => '2016-08-18 15:00:00',
             ),
         );
 

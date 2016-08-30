@@ -26,57 +26,6 @@ class User_Files_Restore extends App {
 
         $container = $this->getContainer();
 
-        /**
-         * Controllers
-         */
-        $container->registerService('PageController', function($c){
-            return new PageController(
-                $c->query('AppName'),
-                $c->query('Request'),
-                $c->query('L10N'),
-                $c->query('RequestService'),
-                $c->query('UserId')
-            );
-        });
-
-        $container->registerService('RequestController', function($c){
-            return new RequestController(
-                $c->query('AppName'),
-                $c->query('Request'),
-                $c->query('L10N'),
-                $c->query('RequestMapper'),
-                $c->query('UserId')
-            );
-        });
-
-        /**
-         * Services
-         */
-        $container->registerService('RequestService', function($c){
-            return new RequestService(
-                $c->query('RequestMapper'),
-                $c->query('UserId'),
-                $c->query('L10N')
-            );
-        });
-
-        /**
-         * Database Layer
-         */
-        $container->registerService('RequestMapper', function($c) {
-            return new RequestMapper(
-                $c->query('ServerContainer')->getDb(),
-                $c->query('L10N')
-            );
-        });
-
-        /**
-         * Core
-         */
-        $container->registerService('UserId', function($c) {
-            return \OCP\User::getUser();
-        });
-
         $container->registerService('L10N', function($c) {
             return $c->query('ServerContainer')->getL10N($c->query('AppName'));
         });

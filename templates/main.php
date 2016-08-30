@@ -8,6 +8,7 @@
  * @license This file is licensed under the Affero General Public License version 3 or later. See the COPYING file.
  */
 
+\OCP\Util::addScript('user_files_restore', 'app');
 \OCP\Util::addStyle('user_files_restore', 'restore');
 
 ?>

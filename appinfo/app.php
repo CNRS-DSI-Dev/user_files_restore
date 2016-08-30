@@ -28,5 +28,11 @@ $c = $app->getContainer();
 /**
  * Load js and overlay icon
  */
-\OCP\Util::addscript($c->query('AppName'), 'restore');
-\OCP\Util::addStyle($c->query('AppName'), 'restore');
+$eventDispatcher = \OC::$server->getEventDispatcher();
+$eventDispatcher->addListener('OCA\Files::loadAdditionalScripts', function() use ($c){
+    \OCP\Util::addscript($c->query('AppName'), 'app');
+    \OCP\Util::addscript($c->query('AppName'), 'userfilesrestoretabview');
+    \OCP\Util::addscript($c->query('AppName'), 'filesplugin');
+    \OCP\Util::addStyle($c->query('AppName'), 'restore');
+});
+
