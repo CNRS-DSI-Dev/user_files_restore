@@ -16,8 +16,8 @@ use \OCA\User_Files_Restore\Controller\RequestController;
 use \OCA\User_Files_Restore\Service\RequestService;
 use \OCA\User_Files_Restore\Db\RequestMapper;
 
-class User_Files_Restore extends App {
-
+class User_Files_Restore extends App
+{
     /**
      * Define your dependencies in here
      */
@@ -25,6 +25,16 @@ class User_Files_Restore extends App {
         parent::__construct('user_files_restore', $urlParams);
 
         $container = $this->getContainer();
+
+        /**
+         * Database Layer
+         */
+        $container->registerService('RequestMapper', function($c) {
+            return new RequestMapper(
+                $c->query('ServerContainer')->getDb(),
+                $c->query('L10N')
+            );
+        });
 
         $container->registerService('L10N', function($c) {
             return $c->query('ServerContainer')->getL10N($c->query('AppName'));

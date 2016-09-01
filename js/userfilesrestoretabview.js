@@ -56,7 +56,11 @@
             ev.preventDefault();
 
             var fileInfo = this.getFileInfo();
-            var file = fileInfo.attributes['path'] + fileInfo.attributes['name'];
+            var sep = '/';
+            if ('/' == fileInfo.attributes['path']) {
+                sep = '';
+            }
+            var file = fileInfo.attributes['path'] + sep + fileInfo.attributes['name'];
             var type = fileInfo.attributes['type'];
 
             // ask confirmation
