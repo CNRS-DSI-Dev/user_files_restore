@@ -6,7 +6,7 @@ Dedicated My CoRe platform app, allowing the user to request files restoration f
 
 As usual, just put the user_files_restore directory inside the "apps" directory in your owncloud instance.
 
-When you will activate the app, a app configuration key `auto_create_user` will be created in table oc_appconfig valued with `[1, 6, 15]`.
+When you will activate the app, a app configuration key `versions` will be created in table oc_appconfig valued with `[1, 6, 15]`.
 This config key set the allowed "versions" to backup from: it's the number of days from today to the backup that will be restored.
 
 You may change these values but it has to be accordingly to the Tivoli Backup Manager configration.
