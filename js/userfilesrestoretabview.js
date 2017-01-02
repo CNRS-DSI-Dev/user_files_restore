@@ -88,18 +88,20 @@
         _drawVersion: function() {
             var self = this;
 
-            OC.AppConfig.getValue('user_files_restore','versions','',function(data) {
-
-                var versions = JSON.parse(data);
-                _.each(versions, function(versionId) {
-                    this._versionTemplate = Handlebars.compile(VERSION_TEMPLATE);
-                    var $li = $(this._versionTemplate({
-                        version: n('user_files_restore', "%n day ago", "%n days ago", versionId),
-                        versionId: versionId,
-                        fileType: self.getFileInfo().attributes['type']
-                    }))
-                    self.$container.append($li);
-                });
+            var url = OC.generateUrl('apps/user_files_restore/api/1.0/versions');
+            $.get(url, function(data) {
+                if (data.status == 'success') {
+                    var versions = JSON.parse(data.data.versions);
+                    _.each(versions, function(versionId) {
+                        this._versionTemplate = Handlebars.compile(VERSION_TEMPLATE);
+                        var $li = $(this._versionTemplate({
+                            version: n('user_files_restore', "%n day ago", "%n days ago", versionId),
+                            versionId: versionId,
+                            fileType: self.getFileInfo().attributes['type']
+                        }))
+                        self.$container.append($li);
+                    });
+                }
             });
         },
 
