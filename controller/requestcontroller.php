@@ -268,6 +268,71 @@ class RequestController extends ApiController
     }
 
     /**
+     * Returns requests list for a user
+     * @param  string $uid User ID
+     * @param  int $status Request status (cf RequestMapper::STATUS_xxx)
+     * @param  int $limit Max nb of results
+     * @return json
+     */
+    public function requests($uid=null, $status=0, $limit=5)
+    {
+        if (is_null($uid)) {
+            $uid = $this->userId;
+        }
+
+        try {
+            $requests = $this->requestMapper->getRequests($uid, $status, $limit);
+        }
+        catch(\Exception $e) {
+            $response = new JSONResponse();
+            return array(
+                'status' => 'error',
+                'data' => array(
+                    'msg' => $e->getMessage(),
+                ),
+            );
+        }
+
+        $requestList = array();
+        foreach($requests as $request) {
+            $row = array(
+                'id' => $request->getId(),
+                'uid' => $request->getUid(),
+                'path' => $request->getPath(),
+                'version' => $request->getVersion(),
+                'date' => $request->getDateRequest(),
+            );
+            switch($request->getStatus()) {
+                case RequestMapper::STATUS_TODO: {
+                    $status = 'TODO';
+                    break;
+                }
+                case RequestMapper::STATUS_RUNNING: {
+                    $status = 'RUNNING';
+                    break;
+                }
+                case RequestMapper::STATUS_DONE: {
+                    $status = "DONE";
+                    break;
+                }
+                default: {
+                    $status = '';
+                }
+            }
+            $row['status'] = $status;
+            array_push($requestList, $row);
+        }
+
+        return array(
+            'status' => 'success',
+            'data' => array(
+                'msg' => $this->l->t('Restoration requests'),
+                'requests' => $requestList,
+            ),
+        );
+    }
+
+    /**
      * Returns allowed "versions"
      * @NoAdminRequired
      * @NoCSRFRequired

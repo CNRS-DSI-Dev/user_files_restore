@@ -33,6 +33,11 @@ $application->registerRoutes($this, array(
             'verb' => 'POST',
         ),
         array(
+            'name' => 'request#requests',
+            'url' => '/api/1.0/requests',
+            'verb' => 'GET',
+        ),
+        array(
             'name' => 'request#versions',
             'url' => '/api/1.0/versions',
             'verb' => 'GET',
