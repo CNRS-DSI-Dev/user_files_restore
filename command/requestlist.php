@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Helper\TableHelper;
+use Symfony\Component\Console\Helper\Table as TableHelper;
 
 use OC\DB\Connection;
 
@@ -73,11 +73,11 @@ class RequestList extends Command
     protected function listRequests($output)
     {
         if (empty($this->searchedStatus) or in_array(1, $this->searchedStatus)) {
-            $this->consoleDisplay('TODO migration requests');
+            $this->consoleDisplay('TODO restore requests');
             $todos = $this->listTodos();
             if (!empty($todos)) {
-                $table = $this->gethelper('table');
-                $table->setLayout(TableHelper::LAYOUT_BORDERLESS);
+                $table = new TableHelper($output);
+                $table->setStyle('borderless');
                 $table->setHeaders(array('requestId', 'userId', 'Path', 'Version', 'Creation date'));
                 $rows = array();
                 foreach($todos as $request) {
@@ -85,7 +85,7 @@ class RequestList extends Command
                     array_push($rows, $row);
                 }
                 $table->setRows($rows);
-                $table->render($output);
+                $table->render();
             }
             else {
                 $this->consoleDisplay('No request found!');
@@ -93,10 +93,10 @@ class RequestList extends Command
         }
 
         if (empty($this->searchedStatus) or in_array(2, $this->searchedStatus)) {
-            $this->consoleDisplay('RUNNING migration requests');
+            $this->consoleDisplay('RUNNING restore requests');
             $runnings = $this->listRunnings();
             if (!empty($runnings)) {
-                $table = $this->gethelper('table');
+                $table = new TableHelper($output);
                 $table->setLayout(TableHelper::LAYOUT_BORDERLESS);
                 $table->setHeaders(array('requestId', 'userId', 'Path', 'Version', 'Creation date'));
                 $rows = array();
@@ -105,7 +105,7 @@ class RequestList extends Command
                     array_push($rows, $row);
                 }
                 $table->setRows($rows);
-                $table->render($output);
+                $table->render();
             }
             else {
                 $this->consoleDisplay('No request found!');
@@ -113,10 +113,10 @@ class RequestList extends Command
         }
 
         if (empty($this->searchedStatus) or in_array(3, $this->searchedStatus)) {
-            $this->consoleDisplay('DONE migration requests');
+            $this->consoleDisplay('DONE restore requests');
             $dones = $this->listDones();
             if (!empty($dones)) {
-                $table = $this->gethelper('table');
+                $table = new TableHelper($output);
                 $table->setLayout(TableHelper::LAYOUT_BORDERLESS);
                 $table->setHeaders(array('requestId', 'userId', 'Path', 'Version', 'Creation date', 'Ending date'));
                 $rows = array();
@@ -125,7 +125,7 @@ class RequestList extends Command
                     array_push($rows, $row);
                 }
                 $table->setRows($rows);
-                $table->render($output);
+                $table->render();
             }
             else {
                 $this->consoleDisplay('No request found!');
