@@ -13,6 +13,8 @@ namespace OCA\User_Files_Restore\Controller;
 use \OCP\AppFramework\ApiController;
 use \OCP\AppFramework\Http\JSONResponse;
 use \OCP\IRequest;
+use \OCP\IUserManager;
+use \OCP\IGroupManager;
 use \OCP\IL10N;
 use \OCA\User_Files_Restore\Db\RequestMapper;
 use \OCA\User_Files_Restore\Db\Request;
@@ -24,13 +26,17 @@ class RequestController extends ApiController
 
     protected $requestMapper;
     protected $userId;
+    protected $userManager;
+    protected $groupManager;
 
-    public function __construct($appName, IRequest $request, IL10N $l, RequestMapper $requestMapper, $userId)
+    public function __construct($appName, IRequest $request, IL10N $l, RequestMapper $requestMapper, $userId, IUserManager $userManager, IGroupManager $groupManager)
     {
         parent::__construct($appName, $request, 'GET, POST');
         $this->l = $l;
         $this->requestMapper = $requestMapper;
         $this->userId = $userId;
+        $this->groupManager = $groupManager;
+        $this->userManager = $userManager;
     }
 
     /**
@@ -273,11 +279,26 @@ class RequestController extends ApiController
      * @param  int $status Request status (cf RequestMapper::STATUS_xxx)
      * @param  int $limit Max nb of results
      * @return json
+     * @NoAdminRequired
      */
     public function requests($uid=null, $status=0, $limit=5)
     {
+        \OC_Util::checkSubAdminUser();
+
         if (is_null($uid)) {
             $uid = $this->userId;
+        }
+
+        $user = $this->userManager->get($uid);
+        $currentUser = $this->userManager->get($this->userId);
+
+        if (!$this->groupManager->getSubAdmin()->isUserAccessible($currentUser, $user)) {
+            return array(
+                'status' => 'error',
+                'data' => array(
+                    'msg' => 'Authentication error',
+                ),
+            );
         }
 
         try {
